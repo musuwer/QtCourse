@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "samp4_10",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "samp4_10::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-samp4_10-Debug-c366c5b8c6cc15a585ba.json",
+					"name" : "samp4_10",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "samp4_10_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-samp4_10_autogen-Debug-8a48b144bcf516b9d430.json",
+					"name" : "samp4_10_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "samp4_10_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-samp4_10_autogen_timestamp_deps-Debug-f7899db453b74fa29df6.json",
+					"name" : "samp4_10_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/musuwer/Desktop/\u4e13\u4e1a\u8bfe/Qt/All_Resources_Code/resource/04/Chap04_Widgets/samp4_10Actions/build/Desktop_Qt_6_9_2_MSVC2022_64bit-Debug",
+		"source" : "C:/Users/musuwer/Desktop/\u4e13\u4e1a\u8bfe/Qt/All_Resources_Code/resource/04/Chap04_Widgets/samp4_10Actions"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

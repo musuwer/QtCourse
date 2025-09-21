@@ -1,0 +1,5 @@
+C:/Users/musuwer/Desktop/专业课/Qt/All_Resources_Code/resource/04/Chap04_Widgets/samp4_10Actions/build/Desktop_Qt_6_9_2_MSVC2022_64bit-Debug/CMakeFiles/samp4_10.dir
+C:/Users/musuwer/Desktop/专业课/Qt/All_Resources_Code/resource/04/Chap04_Widgets/samp4_10Actions/build/Desktop_Qt_6_9_2_MSVC2022_64bit-Debug/CMakeFiles/edit_cache.dir
+C:/Users/musuwer/Desktop/专业课/Qt/All_Resources_Code/resource/04/Chap04_Widgets/samp4_10Actions/build/Desktop_Qt_6_9_2_MSVC2022_64bit-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/musuwer/Desktop/专业课/Qt/All_Resources_Code/resource/04/Chap04_Widgets/samp4_10Actions/build/Desktop_Qt_6_9_2_MSVC2022_64bit-Debug/CMakeFiles/samp4_10_autogen_timestamp_deps.dir
+C:/Users/musuwer/Desktop/专业课/Qt/All_Resources_Code/resource/04/Chap04_Widgets/samp4_10Actions/build/Desktop_Qt_6_9_2_MSVC2022_64bit-Debug/CMakeFiles/samp4_10_autogen.dir
