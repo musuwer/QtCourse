@@ -1,2 +1,2 @@
 # QtCourse
-This is the assignment repository for the Qt course in the 2025-2026 academic year.
+这是2025-2026学年Qt课程的作业仓库。
