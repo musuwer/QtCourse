@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->statusbar->addPermanentWidget(&statusCursorLabel);
 
     QLabel *author = new QLabel(ui->statusbar);
-    author->setText("  皮昊旋  ");
+    author->setText("  柴承源  ");
     ui->statusbar->addPermanentWidget(author);
 
     textChanged = false;

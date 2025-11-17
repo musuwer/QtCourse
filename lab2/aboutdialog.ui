@@ -41,10 +41,10 @@
       </font>
      </property>
      <property name="text">
-      <string>PI文本编辑器</string>
+      <string>文本编辑器</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -95,35 +95,35 @@
        <item>
         <widget class="QLabel" name="name_label">
          <property name="text">
-          <string>开发者：PI Haoxuan</string>
+          <string>开发者：柴承源</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="blog_label">
          <property name="text">
-          <string>blog:https://pi_haoxuan.gitee.io/</string>
+          <string>班级：2023级杨班</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="studentNumber_label">
          <property name="text">
-          <string>学号：202142801017</string>
+          <string>学号：2023414290102</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="email_label">
          <property name="text">
-          <string>Email：pihx2021@dgut.edu.cn</string>
+          <string>Email：chaicy2023@dgut.edu.cn</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="version_label">
          <property name="text">
-          <string>version：1.0.0 Build 20231031</string>
+          <string>version：1.0.0 Build 20251116</string>
          </property>
         </widget>
        </item>
@@ -134,10 +134,10 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>
