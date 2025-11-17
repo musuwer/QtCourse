@@ -29,6 +29,9 @@
    <iconset>
     <normaloff>:/image/replace.png</normaloff>:/image/replace.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-image: url(:/img/about.jpg);</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
