@@ -70,6 +70,13 @@
     </layout>
    </item>
    <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>患者信息资料</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QTableView" name="tableView"/>
    </item>
   </layout>

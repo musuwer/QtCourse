@@ -5,7 +5,7 @@ void IDatabase::ininDatabase()
 {
     //添加数据库驱动
     database = QSqlDatabase::addDatabase("QSQLITE");
-    QString aFile = "C:/Users/musuwer/Desktop/Professional_Courses/Qt/Pi_qt_project/lab3/Lab3.db";
+    QString aFile = "C:/Users/musuwer/Desktop/Professional_Courses/Qt/Pi_qt_project/lab3/Lab4.db";
     database.setDatabaseName(aFile);    //设置数据库名称
     if(!database.open()){
         qDebug()<<"failed to open database";

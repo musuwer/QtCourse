@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
+    <width>322</width>
     <height>391</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1200</width>
+    <height>1200</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>登录</string>
@@ -47,7 +53,7 @@
        <item>
         <widget class="QLabel" name="labelWelcome">
          <property name="text">
-          <string>欢迎使用PI治疗诊断管理系统</string>
+          <string>欢迎使用治疗诊断管理系统</string>
          </property>
         </widget>
        </item>
@@ -70,7 +76,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>皮昊旋2021428010127</string>
+          <string>柴承源2023414290102</string>
          </property>
         </widget>
        </item>
@@ -93,7 +99,7 @@
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>blog：https://pi_haoxuan.gitee.io/</string>
+          <string/>
          </property>
         </widget>
        </item>
