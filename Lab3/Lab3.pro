@@ -35,6 +35,7 @@ FORMS += \
     masterview.ui \
     patienteditview.ui \
     patientmanage.ui \
+    register.ui \
     sectionview.ui \
     welcomeView.ui
 

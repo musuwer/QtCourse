@@ -32,7 +32,7 @@ private:
     void operator=(IDatabase const&)=delete;
 
     QSqlDatabase database;
-    void ininDatabase();
+    void initDatabase();
 
 public:
     bool initPatientModel();
