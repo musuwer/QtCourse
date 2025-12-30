@@ -287,6 +287,9 @@ background: #ecf5f1;
                 <height>16777215</height>
                </size>
               </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0.193, stop:0 rgba(0, 0, 0, 255), stop:0.198068 rgba(14, 8, 73, 255), stop:0.400966 rgba(126, 14, 81, 255), stop:0.57971 rgba(234, 11, 11, 255), stop:0.661836 rgba(244, 70, 5, 255), stop:0.816425 rgba(255, 136, 0, 255), stop:0.935 rgba(239, 236, 55, 255));</string>
+              </property>
              </widget>
             </item>
            </layout>
