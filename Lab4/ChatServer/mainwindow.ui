@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>879</width>
+    <height>592</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>服务器</string>
+  </property>
+  <property name="windowOpacity">
+   <double>11.000000000000000</double>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* 全局背景 */
+QMainWindow {
+    background-color: #2c3e50;
+}
+
+/* 组框 GroupBox */
+QGroupBox {
+    color: #ecf0f1;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #34495e;
+    border-radius: 6px;
+    margin-top: 10px; /* 为标题留出空间 */
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 5px;
+    color: #3498db;
+}
+
+/* 日志文本框 */
+QPlainTextEdit {
+    background-color: #34495e;
+    color: #2ecc71; /* 黑客帝国绿，或者用白色 */
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;, monospace;
+    border: none;
+    border-radius: 4px;
+    selection-background-color: #3498db;
+}
+
+/* 按钮 */
+QPushButton {
+    background-color: #e74c3c; /* 默认显示停止颜色，或者用蓝色 */
+    color: white;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+QPushButton:hover {
+    background-color: #c0392b;
+}
+/* 如果你想让按钮基于状态变色，需要在代码逻辑里动态setStyleSheet，但在设计器里可以先设个通用的 */</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>服务器日志</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPlainTextEdit" name="logEdit"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>689</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="startStopButton">
+        <property name="text">
+         <string>启动服务器</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
