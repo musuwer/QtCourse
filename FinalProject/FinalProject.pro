@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,17 +13,20 @@ SOURCES += \
     loginwindow.cpp \
     logrecordwindow.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    registerwindow.cpp
 
 HEADERS += \
     dbmanager.h \
     loginwindow.h \
     logrecordwindow.h \
-    mainwindow.h
+    mainwindow.h \
+    registerwindow.h
 
 FORMS += \
     login_window.ui \
-    main_window.ui
+    main_window.ui \
+    register_window.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -32,4 +35,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res1.qrc \
-    资源.qrc
+

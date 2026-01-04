@@ -2,14 +2,13 @@
 #define LOGINWINDOW_H
 
 #include <QWidget>
-#include <QMessageBox>
-#include "mainwindow.h"
-#include "registerwindow.h"
-#include "dbmanager.h"
 
 namespace Ui {
 class LoginWindow;
 }
+
+class RegisterWindow;
+class MainWindow;
 
 class LoginWindow : public QWidget
 {
@@ -19,14 +18,25 @@ public:
     explicit LoginWindow(QWidget *parent = nullptr);
     ~LoginWindow();
 
+private:
+    void initUi();
+    void connectSignals();
+
 private slots:
-    void on_btnLogin_clicked();    // 假设UI里按钮叫 btnLogin
-    void on_btnRegister_clicked(); // 假设UI里按钮叫 btnRegister
+    void onLoginClicked();
+    void onRegisterClicked();
+
+    void onMinClicked();
+    void onMaxClicked();
+    void onCloseClicked();
+
+    void onRegisterBack();
+    void onRegisterSuccess(const QString& username);
 
 private:
     Ui::LoginWindow *ui;
-    MainWindow *m_mainWindow;      // 主界面指针
-    RegisterWindow *m_registerWindow; // 注册界面指针
+    RegisterWindow* m_registerWindow = nullptr;
+    MainWindow* m_mainWindow = nullptr;
 };
 
 #endif // LOGINWINDOW_H
