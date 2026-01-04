@@ -9,16 +9,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dbmanager.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    dbmanager.h \
     mainwindow.h
 
 FORMS += \
-    mainwindow.ui
+    login_window.ui \
+    main_window.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res1.qrc \
+    资源.qrc
