@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     dbmanager.cpp \
+    homewindow.cpp \
     loginwindow.cpp \
     logrecordwindow.cpp \
     main.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     dbmanager.h \
+    homewindow.h \
     loginwindow.h \
     logrecordwindow.h \
     mainwindow.h \
@@ -26,6 +28,7 @@ HEADERS += \
 FORMS += \
     login_window.ui \
     main_window.ui \
+    mainwindow.ui \
     register_window.ui
 
 # Default rules for deployment.

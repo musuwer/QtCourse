@@ -13,30 +13,23 @@ class MainWindow;
 class LoginWindow : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit LoginWindow(QWidget *parent = nullptr);
     ~LoginWindow();
 
-private:
-    void initUi();
-    void connectSignals();
-
 private slots:
-    void onLoginClicked();
-    void onRegisterClicked();
+    void handleLogin();
+    void openRegister();
+    void backFromRegister();
+    void otherLoginNotReady();
 
-    void onMinClicked();
-    void onMaxClicked();
-    void onCloseClicked();
-
-    void onRegisterBack();
-    void onRegisterSuccess(const QString& username);
+private:
+    void bindOtherLoginButtonsByText();
 
 private:
     Ui::LoginWindow *ui;
-    RegisterWindow* m_registerWindow = nullptr;
-    MainWindow* m_mainWindow = nullptr;
+    RegisterWindow* m_register = nullptr;
+    MainWindow* m_main = nullptr;
 };
 
 #endif // LOGINWINDOW_H

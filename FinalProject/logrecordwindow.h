@@ -2,7 +2,10 @@
 #define LOGRECORDWINDOW_H
 
 #include <QWidget>
-#include <QSqlTableModel>
+#include <QString>
+
+class QSqlTableModel;
+class QSortFilterProxyModel;
 
 namespace Ui {
 class LogRecordWindow;
@@ -13,19 +16,31 @@ class LogRecordWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit LogRecordWindow(int userId, QWidget *parent = nullptr);
+    explicit LogRecordWindow(int userId, const QString& username, QWidget *parent = nullptr);
     ~LogRecordWindow();
 
-    void refreshData(); // 刷新数据
+public slots:
+    void refreshData();
+
+private:
+    void initUi();
+    void connectSignals();
+    void updateCountLabel();
 
 private slots:
-    void on_btnAddLog_clicked();
-    void on_btnDeleteLog_clicked();
+    void onAddLogClicked();
+    void onRefreshClicked();
+    void onSearchClicked();
+
+    void onTableContextMenuRequested(const QPoint& pos);
 
 private:
     Ui::LogRecordWindow *ui;
-    QSqlTableModel *m_model; // 核心：使用 SqlModel
-    int m_currentUserId;
+    int m_userId = -1;
+    QString m_username;
+
+    QSqlTableModel* m_model = nullptr;
+    QSortFilterProxyModel* m_proxy = nullptr;
 };
 
 #endif // LOGRECORDWINDOW_H

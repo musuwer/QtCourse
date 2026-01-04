@@ -9,8 +9,12 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     , ui(new Ui::RegisterWindow)
 {
     ui->setupUi(this);
-    initUi();
-    connectSignals();
+
+    ui->lineEditPass->setEchoMode(QLineEdit::Password);
+    ui->lineEditConfirm->setEchoMode(QLineEdit::Password);
+
+    connect(ui->register_pushButton, &QPushButton::clicked, this, &RegisterWindow::handleRegister);
+    connect(ui->return_pushButton, &QPushButton::clicked, this, &RegisterWindow::handleReturn);
 }
 
 RegisterWindow::~RegisterWindow()
@@ -18,68 +22,38 @@ RegisterWindow::~RegisterWindow()
     delete ui;
 }
 
-void RegisterWindow::initUi()
+void RegisterWindow::handleReturn()
 {
-    setWindowTitle("Trip Memory · 旅忆 - 注册");
-    ui->lineEditPass->setEchoMode(QLineEdit::Password);
-    ui->lineEditConfirm->setEchoMode(QLineEdit::Password);
+    emit backToLoginRequested();
+    close();
 }
 
-void RegisterWindow::connectSignals()
+void RegisterWindow::handleRegister()
 {
-    connect(ui->register_pushButton, &QPushButton::clicked, this, &RegisterWindow::onRegisterClicked);
-    connect(ui->return_pushButton, &QPushButton::clicked, this, &RegisterWindow::onReturnClicked);
-
-    connect(ui->min_button, &QPushButton::clicked, this, &RegisterWindow::onMinClicked);
-    connect(ui->max_button, &QPushButton::clicked, this, &RegisterWindow::onMaxClicked);
-    connect(ui->close_button, &QPushButton::clicked, this, &RegisterWindow::onCloseClicked);
-}
-
-void RegisterWindow::onRegisterClicked()
-{
-    if (!DbManager::instance().isOpen()) {
-        QMessageBox::critical(this, "错误", "数据库打开失败，请重启程序。");
-        return;
-    }
-
-    const QString username = ui->lineEditUser->text().trimmed();
+    const QString user = ui->lineEditUser->text().trimmed();
     const QString pass = ui->lineEditPass->text();
     const QString confirm = ui->lineEditConfirm->text();
 
-    if (username.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
-        QMessageBox::warning(this, "提示", "请完整填写注册信息。");
+    if (user.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
+        QMessageBox::warning(this, "注册", "请填写完整信息。");
         return;
     }
     if (pass != confirm) {
-        QMessageBox::warning(this, "提示", "两次输入的密码不一致。");
+        QMessageBox::warning(this, "注册", "两次输入的密码不一致。");
         return;
     }
 
-    QString err;
-    if (!DbManager::instance().registerUser(username, pass, &err)) {
-        QMessageBox::warning(this, "注册失败", err.isEmpty() ? "注册失败，请更换用户名后重试。" : err);
+    if (!DbManager::instance().init()) {
+        QMessageBox::critical(this, "注册", "数据库初始化失败。");
         return;
     }
 
-    emit registerSuccess(username);
-}
+    if (!DbManager::instance().registerUser(user, pass)) {
+        QMessageBox::warning(this, "注册", "注册失败：用户名可能已存在。");
+        return;
+    }
 
-void RegisterWindow::onReturnClicked()
-{
-    emit requestBack();
-}
-
-void RegisterWindow::onMinClicked()
-{
-    showMinimized();
-}
-
-void RegisterWindow::onMaxClicked()
-{
-    isMaximized() ? showNormal() : showMaximized();
-}
-
-void RegisterWindow::onCloseClicked()
-{
+    QMessageBox::information(this, "注册", "注册成功，请返回登录。");
+    emit backToLoginRequested();
     close();
 }

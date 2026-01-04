@@ -10,26 +10,16 @@ class RegisterWindow;
 class RegisterWindow : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit RegisterWindow(QWidget *parent = nullptr);
     ~RegisterWindow();
 
 signals:
-    void requestBack();
-    void registerSuccess(const QString& username);
-
-private:
-    void initUi();
-    void connectSignals();
+    void backToLoginRequested();
 
 private slots:
-    void onRegisterClicked();
-    void onReturnClicked();
-
-    void onMinClicked();
-    void onMaxClicked();
-    void onCloseClicked();
+    void handleRegister();
+    void handleReturn();
 
 private:
     Ui::RegisterWindow *ui;

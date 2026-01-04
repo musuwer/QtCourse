@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>LoginWindow</class>
+ <widget class="QWidget" name="LoginWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -32,10 +32,10 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
@@ -65,10 +65,10 @@ border-bottom-left-radius:30px;
 </string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Shadow::Raised</enum>
         </property>
         <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
@@ -86,10 +86,10 @@ border-bottom-left-radius:30px;
           <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Minimum</enum>
+             <enum>QSizePolicy::Policy::Minimum</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -104,7 +104,7 @@ border-bottom-left-radius:30px;
             <item>
              <spacer name="horizontalSpacer_3">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -147,7 +147,7 @@ Trip Memory !</string>
             <item>
              <spacer name="horizontalSpacer_4">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -162,7 +162,7 @@ Trip Memory !</string>
           <item>
            <spacer name="verticalSpacer_2">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -184,10 +184,10 @@ border-top-right-radius:30px;
 border-bottom-right-radius:30px;</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Shadow::Raised</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
@@ -199,10 +199,10 @@ border-bottom-right-radius:30px;</string>
             </size>
            </property>
            <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
+            <enum>QFrame::Shape::StyledPanel</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
+            <enum>QFrame::Shadow::Raised</enum>
            </property>
            <widget class="QWidget" name="layoutWidget">
             <property name="geometry">
@@ -220,7 +220,7 @@ border-bottom-right-radius:30px;</string>
              <item>
               <spacer name="horizontalSpacer">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -345,7 +345,7 @@ QPushButton{
              <item>
               <spacer name="horizontalSpacer_2">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -362,10 +362,10 @@ QPushButton{
          <item>
           <widget class="QFrame" name="frame_6">
            <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
+            <enum>QFrame::Shape::StyledPanel</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
+            <enum>QFrame::Shadow::Raised</enum>
            </property>
            <widget class="QWidget" name="widget_2" native="true">
             <property name="geometry">
@@ -376,7 +376,7 @@ QPushButton{
               <height>431</height>
              </rect>
             </property>
-            <widget class="QLineEdit" name="username_lineEdit">
+            <widget class="QLineEdit" name="lineEditUser">
              <property name="geometry">
               <rect>
                <x>30</x>
@@ -401,7 +401,7 @@ border-radius:8px;</string>
               <string>账号：</string>
              </property>
             </widget>
-            <widget class="QLineEdit" name="password_lineEdit">
+            <widget class="QLineEdit" name="lineEditPass">
              <property name="geometry">
               <rect>
                <x>30</x>
@@ -423,7 +423,7 @@ border-radius:8px;</string>
               <string>admin</string>
              </property>
              <property name="echoMode">
-              <enum>QLineEdit::Password</enum>
+              <enum>QLineEdit::EchoMode::Password</enum>
              </property>
              <property name="placeholderText">
               <string>密码：</string>
@@ -477,7 +477,7 @@ border-radius:8px;</string>
               <string>记住</string>
              </property>
             </widget>
-            <widget class="QPushButton" name="register_pushButton">
+            <widget class="QPushButton" name="btnRegister">
              <property name="geometry">
               <rect>
                <x>30</x>
@@ -494,13 +494,13 @@ border-radius:8px;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">
-#register_pushButton{
+#btnRegister{
 	background-color: rgb(255, 255, 255);
 	
 	border:2px solid rgb(0,0,0);
 	border-radius:8px;
 }
-#register_pushButton:hover{
+#btnRegister:hover{
 	background-color:rgb(196, 196, 196);
 	color: rgb(0, 0, 0);
 }
@@ -508,7 +508,7 @@ border-radius:8px;</string>
 	padding-top:5px;
 	padding-left:5px;
 }
-#register_pushButton:pressed{
+#btnRegister:pressed{
 	padding-top:5px;
 	padding-left:5px;
 }
@@ -726,7 +726,7 @@ QPushButton{
   <connection>
    <sender>min_button</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>LoginWindow</receiver>
    <slot>showNormal()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -742,7 +742,7 @@ QPushButton{
   <connection>
    <sender>max_button</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>LoginWindow</receiver>
    <slot>showFullScreen()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -758,7 +758,7 @@ QPushButton{
   <connection>
    <sender>close_button</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>LoginWindow</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">

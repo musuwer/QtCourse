@@ -1,37 +1,59 @@
 #include "logrecordwindow.h"
 #include "ui_logrecord_window.h"
-#include "dbmanager.h"
 
-LogRecordWindow::LogRecordWindow(int userId, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::LogRecordWindow),
-    m_currentUserId(userId)
+#include <QSqlTableModel>
+#include <QSortFilterProxyModel>
+#include <QMenu>
+#include <QMessageBox>
+#include <QHeaderView>
+#include <QDate>
+
+#include "dbmanager.h"
+#include "addlogwindow.h"
+
+namespace {
+
+class LogFilterProxyModel : public QSortFilterProxyModel
+{
+public:
+    explicit LogFilterProxyModel(QObject* parent=nullptr) : QSortFilterProxyModel(parent) {}
+
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override
+    {
+        const QString kw = filterRegularExpression().pattern().trimmed();
+        if (kw.isEmpty()) return true;
+
+        // title/person/place/date/score 全字段模糊匹配
+        const int cols = sourceModel()->columnCount();
+        for (int c = 0; c < cols; ++c) {
+            const QModelIndex idx = sourceModel()->index(source_row, c, source_parent);
+            const QString v = sourceModel()->data(idx).toString();
+            if (v.contains(kw, Qt::CaseInsensitive)) return true;
+        }
+        return false;
+    }
+};
+
+static int safeToInt(const QString& s, int def)
+{
+    bool ok=false;
+    int v=s.trimmed().toInt(&ok);
+    return ok ? v : def;
+}
+
+}
+
+LogRecordWindow::LogRecordWindow(int userId, const QString& username, QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::LogRecordWindow)
+    , m_userId(userId)
+    , m_username(username)
 {
     ui->setupUi(this);
-
-    // --- 核心 Model/View 实现 ---
-    m_model = new QSqlTableModel(this);
-    m_model->setTable("logs");
-    // 设置过滤器，只显示当前用户的日志
-    m_model->setFilter(QString("user_id = %1").arg(m_currentUserId));
-    m_model->select(); // 查询数据
-
-    // 设置表头别名
-    m_model->setHeaderData(2, Qt::Horizontal, tr("Date"));
-    m_model->setHeaderData(3, Qt::Horizontal, tr("Mood"));
-    m_model->setHeaderData(4, Qt::Horizontal, tr("Content"));
-
-    // 将 Model 绑定到 View (假设 UI 里有个 QTableView 叫 tableView)
-    // 如果你的 UI 里是 QTableWidget，请在 Designer 里把它删了换成 QTableView！
-    ui->tableView->setModel(m_model);
-
-    // 隐藏 ID 列和 UserID 列
-    ui->tableView->setColumnHidden(0, true);
-    ui->tableView->setColumnHidden(1, true);
-
-    // 优化显示
-    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers); // 禁止直接编辑，或允许编辑
+    initUi();
+    connectSignals();
+    refreshData();
 }
 
 LogRecordWindow::~LogRecordWindow()
@@ -39,20 +61,135 @@ LogRecordWindow::~LogRecordWindow()
     delete ui;
 }
 
-void LogRecordWindow::refreshData() {
-    m_model->select(); // 重新查询数据库刷新界面
+void LogRecordWindow::initUi()
+{
+    // tableView 基础设置
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    // model
+    m_model = new QSqlTableModel(this, DbManager::instance().database());
+    m_model->setTable("logs");
+    m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    m_model->setFilter(QString("user_id=%1").arg(m_userId));
+    m_model->select();
+
+    // headers
+    // logs: id,user_id,title,person,place,log_date,mood_score,created_at
+    m_model->setHeaderData(2, Qt::Horizontal, "事件标题");
+    m_model->setHeaderData(3, Qt::Horizontal, "相关人物");
+    m_model->setHeaderData(4, Qt::Horizontal, "地点/备注");
+    m_model->setHeaderData(5, Qt::Horizontal, "日期");
+    m_model->setHeaderData(6, Qt::Horizontal, "情绪评分");
+    m_model->setHeaderData(7, Qt::Horizontal, "创建时间");
+
+    m_proxy = new LogFilterProxyModel(this);
+    m_proxy->setSourceModel(m_model);
+
+    ui->tableView->setModel(m_proxy);
+    // 隐藏 id/user_id
+    ui->tableView->hideColumn(0);
+    ui->tableView->hideColumn(1);
+
+    updateCountLabel();
 }
 
-void LogRecordWindow::on_btnAddLog_clicked() {
-    // 这里弹出 AddLogWindow
-    // AddLogWindow 保存数据到数据库后，调用 this->refreshData();
+void LogRecordWindow::connectSignals()
+{
+    connect(ui->add_log_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onAddLogClicked);
+    connect(ui->refresh_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onRefreshClicked);
+    connect(ui->search_log_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onSearchClicked);
+    connect(ui->tableView, &QTableView::customContextMenuRequested, this, &LogRecordWindow::onTableContextMenuRequested);
 }
 
-void LogRecordWindow::on_btnDeleteLog_clicked() {
-    // 获取当前选中的行
-    QModelIndexList selection = ui->tableView->selectionModel()->selectedRows();
-    if(selection.count() > 0) {
-        m_model->removeRow(selection.at(0).row());
-        m_model->submitAll(); // 提交删除到数据库
+void LogRecordWindow::refreshData()
+{
+    if (!m_model) return;
+    m_model->setFilter(QString("user_id=%1").arg(m_userId));
+    m_model->select();
+    updateCountLabel();
+}
+
+void LogRecordWindow::updateCountLabel()
+{
+    if (!m_model) return;
+    ui->book_total_label->setText(QString("总计：%1").arg(m_model->rowCount()));
+}
+
+void LogRecordWindow::onAddLogClicked()
+{
+    AddLogWindow dlg(this);
+    dlg.setWindowTitle("添加事件记录");
+
+    if (dlg.exec() != QDialog::Accepted) {
+        return;
     }
+
+    const QString title = dlg.getTitle();
+    const QString person = dlg.getPerson();
+    const QString place = dlg.getPlace();
+    QString dateStr = dlg.getDateStr();
+    int score = dlg.getMoodScore();
+
+    if (dateStr.trimmed().isEmpty()) {
+        dateStr = QDate::currentDate().toString("yyyy-MM-dd");
+    } else {
+        // 尝试规范化为 yyyy-MM-dd
+        const QDate d = QDate::fromString(dateStr.trimmed(), "yyyy-MM-dd");
+        if (d.isValid()) dateStr = d.toString("yyyy-MM-dd");
+    }
+
+    QString err;
+    if (!DbManager::instance().addLog(m_userId, title, person, place, dateStr, score, &err)) {
+        QMessageBox::warning(this, "添加失败", err);
+        return;
+    }
+
+    refreshData();
+}
+
+void LogRecordWindow::onRefreshClicked()
+{
+    ui->log_search_content_lineEdit->clear();
+    m_proxy->setFilterRegularExpression(QRegularExpression());
+    refreshData();
+}
+
+void LogRecordWindow::onSearchClicked()
+{
+    const QString kw = ui->log_search_content_lineEdit->text().trimmed();
+    if (kw.isEmpty()) {
+        m_proxy->setFilterRegularExpression(QRegularExpression());
+    } else {
+        // 直接用 pattern 存关键字，LogFilterProxyModel 会按 contains 来匹配
+        m_proxy->setFilterRegularExpression(QRegularExpression(kw, QRegularExpression::CaseInsensitiveOption));
+    }
+}
+
+void LogRecordWindow::onTableContextMenuRequested(const QPoint& pos)
+{
+    const QModelIndex proxyIdx = ui->tableView->indexAt(pos);
+    if (!proxyIdx.isValid()) return;
+
+    QMenu menu(this);
+    QAction* actDelete = menu.addAction("删除选中记录");
+    QAction* chosen = menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
+    if (chosen != actDelete) return;
+
+    const QModelIndex srcIdx = m_proxy->mapToSource(proxyIdx);
+    const int row = srcIdx.row();
+    const int logId = m_model->data(m_model->index(row, 0)).toInt();
+
+    const auto ret = QMessageBox::question(this, "确认删除", "确定删除该记录吗？");
+    if (ret != QMessageBox::Yes) return;
+
+    QString err;
+    if (!DbManager::instance().deleteLogById(logId, &err)) {
+        QMessageBox::warning(this, "删除失败", err);
+        return;
+    }
+    refreshData();
 }
