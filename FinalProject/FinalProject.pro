@@ -10,11 +10,13 @@ CONFIG += c++17
 
 SOURCES += \
     dbmanager.cpp \
+    loginwindow.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     dbmanager.h \
+    loginwindow.h \
     mainwindow.h
 
 FORMS += \
