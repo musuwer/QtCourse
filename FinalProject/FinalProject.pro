@@ -19,6 +19,7 @@ SOURCES += \
     logrecordwindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    moodcalendarwindow.cpp \
     registerwindow.cpp
 
 HEADERS += \
@@ -31,6 +32,7 @@ HEADERS += \
     loginwindow.h \
     logrecordwindow.h \
     mainwindow.h \
+    moodcalendarwindow.h \
     registerwindow.h
 
 FORMS += \
@@ -41,6 +43,7 @@ FORMS += \
     login_window.ui \
     main_window.ui \
     mainwindow.ui \
+    mood_calendar_window.ui \
     register_window.ui
 
 # Default rules for deployment.
