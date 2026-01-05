@@ -1,0 +1,403 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ui version="4.0">
+ <class>AboutWindow</class>
+ <widget class="QWidget" name="AboutWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1034</width>
+    <height>754</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">
+#frame{
+	background-color: rgb(255, 85, 0);
+border-radius:20px;
+}
+</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QFrame" name="frame_2">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+border-radius:20px;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <widget class="QTabWidget" name="tabWidget">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>宋体</family>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true" />
+           </property>
+           <property name="currentIndex">
+            <number>5</number>
+           </property>
+           <widget class="QWidget" name="tab_about">
+            <attribute name="title">
+             <string>版本信息</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QTextEdit" name="textEdit_2">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;meta charset="utf-8" /&gt;&lt;style type="text/css"&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: "\2610"; }
+li.checked::marker { content: "\2612"; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=" font-family:'Microsoft YaHei UI'; font-size:9pt; font-weight:400; font-style:normal;"&gt;
+&lt;h2 style=" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:x-large; font-weight:700;"&gt;版本信息&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;软件名称&lt;/span&gt;：忆途（Trip Memory）&lt;br /&gt;&lt;span style=" font-weight:700;"&gt;版本号&lt;/span&gt;：忆途版本1.0&lt;br /&gt;&lt;span style=" font-weight:700;"&gt;开发时间&lt;/span&gt;：2025年5月1日 — 2025年6月1日&lt;/p&gt;
+&lt;h3 style="-qt-paragraph-type:empty; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:large; font-weight:700;"&gt;&lt;br /&gt;&lt;/h3&gt;
+&lt;p style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;开发者信息&lt;/span&gt;&lt;/p&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;学校&lt;/span&gt;：东莞理工学院（DGUT）&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;学院&lt;/span&gt;：学生社区知行学院&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;专业&lt;/span&gt;：软件工程&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;班级&lt;/span&gt;：2023杨班&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;姓名&lt;/span&gt;：柴承源&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;学号&lt;/span&gt;：2023414290102&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>软件简介和主要功能</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QTextEdit" name="textEdit_5">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;meta charset="utf-8" /&gt;&lt;style type="text/css"&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: "\2610"; }
+li.checked::marker { content: "\2612"; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=" font-family:'Microsoft YaHei UI'; font-size:9pt; font-weight:400; font-style:normal;"&gt;
+&lt;h2 style=" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:x-large; font-weight:700;"&gt;软件简介&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;      忆途（Trip Memory）是一款个人成长与生活管理平台，集成了多种记录、管理和数据可视化功能，旨在帮助用户高效梳理个人目标、成长轨迹与情感变化。忆途支持数据的动态统计、可视化分析&lt;/span&gt;与友好的交互体验，为学生的学习生活与自我成长提供全方位的数字化助力。&lt;/p&gt;
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;      系统采用模块化设计，功能覆盖了&lt;span style=" font-weight:700;"&gt;公告、目标、成就、事件、心情、反馈&lt;/span&gt;等核心场景，并通过美观的界面、灵活的数据结构和清晰的权限分工，让每位用户都能便捷、安全地管理自己的成长足迹。&lt;/p&gt;
+&lt;h2 style="-qt-paragraph-type:empty; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:x-large; font-weight:700;"&gt;&lt;br /&gt;&lt;/h2&gt;
+&lt;p style=" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:x-large; font-weight:700;"&gt;主要功能&lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;1. 公告管理&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;支持校园通知和个人公告的集中展示。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;管理员可直接发布、修改和删除公告，普通用户可浏览全部信息。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;公告详细内容可通过点击弹窗进行查看，提升阅读体验。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;2. 目标管理&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;支持个人目标的添加、进度跟踪和达成记录。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;目标内容可随时修改，管理员可对全体用户的目标进行管理。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;目标进度可视化展现，方便自我激励和复盘。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;3. 成就记录&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;分类记录各类荣誉、证书、竞赛获奖等成就事件。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;支持多维度（类型/级别/获奖时间等）条件检索与数据编辑。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;自动生成成就类型柱状图、成就级别饼图等&lt;span style=" font-weight:700;"&gt;可视化统计图表&lt;/span&gt;，直观展现成长亮点。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;支持点击表格行弹出详细信息窗口，并可实时编辑、保存。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;4. 事件记录&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;支持日常重要事件的详细记录，包括事件类型、地点、发生时间、影响程度等。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;事件可按多条件筛选和排序，支持内容的修改与追踪。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;系统自动生成&lt;span style=" font-weight:700;"&gt;事件类型扇形图&lt;/span&gt;和&lt;span style=" font-weight:700;"&gt;事件影响折线图&lt;/span&gt;，用图形方式洞察生活轨迹与变化。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;5. 心情记录与情感日历&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;用户可每日打卡心情，并为情绪评分、编写心得体会。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;系统自动生成&lt;span style=" font-weight:700;"&gt;情感折线图&lt;/span&gt;，横轴为日期、纵轴为情绪评分，帮助用户追踪情感变化趋势。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;日历模式直观展现每一天的心情，便于回顾和反思。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;6. 反馈与交流&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;内置用户意见反馈和建议渠道，支持消息的发送、回复与历史追溯。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;消息内容支持已读/未读、已回复等状态区分。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;管理员可全局查看和回复所有反馈，提升沟通效率。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;7. 数据可视化展现&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;各核心模块均集成数据分析与可视化功能，包括：
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;柱状图&lt;/span&gt;（如成就类型分布）&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;扇形图/饼图&lt;/span&gt;（如成就级别、事件类型分布）&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;折线图&lt;/span&gt;（如心情随时间变化、事件影响随时间变化）&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;图表采用多色渐变方案，美观直观，支持实时刷新，与数据同步。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;8. 多角色权限支持&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;系统区分普通用户和管理员两类角色。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;管理员拥有公告、目标、成就等全局管理权限，普通用户仅可操作个人数据。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;保证数据安全、权限分明，兼顾开放性与隐私性。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;9. 界面美观与体验优化&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;应用采用PyQt5框架与自定义QSS样式，美观且实用。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;大量定制化图标、动效（如飘动星星）、提示窗，整体风格简洁大方、易用易懂。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;支持多种交互细节优化（如弹窗编辑、自动对齐、图表自适应缩放），提升整体体验。&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_help">
+            <attribute name="title">
+             <string>使用帮助</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QTextEdit" name="textEdit">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;meta charset="utf-8" /&gt;&lt;style type="text/css"&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: "\2610"; }
+li.checked::marker { content: "\2612"; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=" font-family:'Microsoft YaHei UI'; font-size:9pt; font-weight:400; font-style:normal;"&gt;
+&lt;h2 style=" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:x-large; font-weight:700;"&gt;使用帮助&lt;/span&gt;&lt;/h2&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;1. 首次使用&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;启动与登录&lt;/span&gt;&lt;br /&gt;启动忆途软件后，系统将显示登录界面。请使用已注册账号登录，管理员可使用默认账号（用户名：admin，密码：admin）。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;导航与初步体验&lt;/span&gt;&lt;br /&gt;登录成功后，主界面左侧为模块导航栏，右侧为各功能区内容。可根据个人需求，点击不同标签快速切换至“公告栏”、“目标管理”、“成就记录”、“事件记录”、“心情日历”、“反馈交流”等核心功能模块。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;2. 数据录入&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;添加新数据&lt;/span&gt;&lt;br /&gt;在“目标”、“成就”、“事件”、“心情”等模块，点击“添加”按钮，系统会弹出数据录入窗口。请根据提示，填写所需信息，如目标名称、事件内容、成就级别等。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;保存与编辑&lt;/span&gt;&lt;br /&gt;数据填写完整后，点击“保存”或“提交”即可写入数据库。若发现录入信息有误，点击表格行可进入详情页面，支持修改和再次保存。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;快捷录入&lt;/span&gt;&lt;br /&gt;多数数据支持批量或多次录入，信息补充越丰富，后续可视化与成长记录越完善。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;3. 数据查询与管理&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;快速搜索&lt;/span&gt;&lt;br /&gt;顶部或模块页面的“搜索”栏支持关键词模糊检索、下拉选择类型等多条件组合查询，便于快速定位数据。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;权限说明&lt;/span&gt;&lt;br /&gt;管理员账号拥有全局数据的添加、编辑、删除、查询等操作权限，可管理所有用户的数据。普通用户仅可查看和管理自己的记录。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;数据编辑与删除&lt;/span&gt;&lt;br /&gt;表格区右键数据行，弹出快捷菜单，可直接进行编辑、删除等常用操作。编辑后务必点击“保存”，确保数据更新生效。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;4. 数据统计与可视化&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;自动统计分析&lt;/span&gt;&lt;br /&gt;点击各模块“统计”或“分析”按钮，即可一键生成对应的柱状图、饼图、折线图等数据可视化报表。例如：成就类型分布、事件类型统计、心情变化曲线等。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;图表交互说明&lt;/span&gt;&lt;br /&gt;图表可自适应窗口大小显示，支持缩放、移动等基本交互。添加或修改数据后，相关统计图会自动刷新、同步展示最新数据。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;5. 界面及操作说明&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;主界面布局&lt;/span&gt;&lt;br /&gt;主界面通常分为三大区域：左侧导航区（功能模块切换）、中部功能区（数据列表与图表）、顶部快捷操作栏（添加、搜索、统计、刷新等）。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;弹窗与交互&lt;/span&gt;&lt;br /&gt;数据添加、详情、统计等均以弹窗形式呈现，界面简洁明了，操作步骤清晰。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;界面美化&lt;/span&gt;&lt;br /&gt;全局采用现代化QSS风格，配合丰富图标和动画，界面体验舒适美观。&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:large; font-weight:700;"&gt;6. 常见问题&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;无法登录？&lt;/span&gt;&lt;br /&gt;请确认用户名、密码输入正确，或联系管理员重置账号。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;数据丢失/不显示？&lt;/span&gt;&lt;br /&gt;检查数据库文件是否存在于项目根目录（data.db），如有疑问可重启软件或联系技术支持。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;统计图未更新？&lt;/span&gt;&lt;br /&gt;请确认已完成数据录入/修改并刷新页面。若依然异常可尝试重启程序。&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_2">
+            <attribute name="title">
+             <string>注意事项</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QTextEdit" name="textEdit_6">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;meta charset="utf-8" /&gt;&lt;style type="text/css"&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: "\2610"; }
+li.checked::marker { content: "\2612"; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=" font-family:'Microsoft YaHei UI'; font-size:9pt; font-weight:400; font-style:normal;"&gt;
+&lt;h2 style=" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:x-large; font-weight:700;"&gt;注意事项&lt;/span&gt;&lt;/h2&gt;
+&lt;ol style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;数据文件安全&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;请勿随意删除、移动或重命名 &lt;span style=" font-family:'Courier New';"&gt;data.db&lt;/span&gt; 数据库文件以及 &lt;span style=" font-family:'Courier New';"&gt;res&lt;/span&gt;、&lt;span style=" font-family:'Courier New';"&gt;img&lt;/span&gt; 等资源文件夹。这些文件和文件夹是软件正常运行、数据持久保存的核心资源。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;软件所有的个人记录、公告、目标、成就等数据均保存在 &lt;span style=" font-family:'Courier New';"&gt;data.db&lt;/span&gt; 文件中。丢失或损坏将导致数据不可恢复。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;环境与依赖要求&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;本软件基于 Python 3.7 及以上版本开发，依赖 PyQt5、matplotlib、sqlite3 等基础库。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;如遇启动异常、界面不显示或功能不可用，请优先检查本地 Python 环境和相关依赖库是否已完整安装。如有需要，建议使用打包版安装程序或联系技术支持获取完整环境配置说明。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;数据迁移与备份&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;如需在不同电脑或环境间迁移、备份忆途软件的数据，请务必一同复制 &lt;span style=" font-family:'Courier New';"&gt;data.db&lt;/span&gt; 数据库文件和 &lt;span style=" font-family:'Courier New';"&gt;res&lt;/span&gt;（资源文件夹），否则图片、界面样式等可能无法正常显示，数据也无法完整恢复。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;定期手动备份 &lt;span style=" font-family:'Courier New';"&gt;data.db&lt;/span&gt; 文件，以防电脑系统故障或误操作带来数据丢失风险。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;软件用途与法律声明&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;忆途（Trip Memory）仅限于高校学生个人学习、成长档案管理及课程设计、软件工程项目等非商业用途。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;严禁将本软件用于商业推广、数据售卖等商业行为。如有违规，开发者不承担任何法律责任。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;维护与反馈&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;如遇到功能BUG、软件闪退、数据无法保存等情况，建议优先通过“反馈与交流”模块上报问题，开发者会持续关注并维护升级版本。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;对于源码二次开发、功能拓展等需求，请遵循开源协议及原作者署名说明。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;p style="-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;温馨提示：&lt;/span&gt;&lt;br /&gt;为保障数据安全和用户体验，请妥善保管好数据库文件和资源文件夹，不建议手动编辑或用其它工具打开 &lt;span style=" font-family:'Courier New';"&gt;data.db&lt;/span&gt; 文件。遇到任何问题可随时通过软件反馈通道联系作者或维护团队。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_3">
+            <attribute name="title">
+             <string>法律条款</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QTextEdit" name="textEdit_7">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;meta charset="utf-8" /&gt;&lt;style type="text/css"&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: "\2610"; }
+li.checked::marker { content: "\2612"; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=" font-family:'Microsoft YaHei UI'; font-size:9pt; font-weight:400; font-style:normal;"&gt;
+&lt;h2 style=" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:x-large; font-weight:700;"&gt;法律条款&lt;/span&gt;&lt;/h2&gt;
+&lt;ol style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;开源与用途声明&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;本软件（忆途 Trip Memory）为开源及课程设计性质项目，仅供高校师生个人学习、学术交流与课程实验研究使用。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;严禁将本软件用于任何形式的商业用途，包括但不限于数据交易、商业推广、盈利性运营等。如有商业使用行为，开发者有权追究相关责任。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;免责声明&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;本软件为免费工具，开发者及贡献者已尽最大努力保证软件功能的稳定与数据安全，但无法保证程序在所有环境下绝对无故障运行。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;使用本软件所产生的任何后果，包括但不限于因数据丢失、系统崩溃、硬件损坏等导致的直接或间接损失，开发者和贡献者不承担任何法律责任。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;开源协议及第三方库&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;本项目部分代码和资源依赖第三方开源库（如 PyQt5、matplotlib 等），均严格遵循其原有开源协议。所有相关的版权、许可证及引用声明，均已在软件源代码或相关文档中详细注明。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;用户在使用本软件时，需共同遵守相关第三方库的许可协议。如需详细了解，请参考源代码中的 LICENSE 文件或第三方库的官方文档说明。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;用户数据及隐私&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;本软件仅在本地保存用户数据，不会自动上传、同步或分享至互联网服务器。请用户自行妥善保存和备份数据。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;开发者不会主动收集、分析或公开用户的个人信息与使用数据，用户完全拥有本地数据的所有权和控制权。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;知识产权&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;本项目的所有源代码、UI设计、数据结构及相关文档归原作者及开发团队所有。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;欢迎在遵循开源协议和署名规则的前提下进行二次开发、学习和非商业性传播。如需引用或发布请注明出处。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;p style="-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;      如有疑问或建议，请通过软件反馈功能或联系开发者邮箱197844XXX@QQ.COM进行沟通。感谢您的支持与理解！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_4">
+            <attribute name="title">
+             <string>引用第三方声明</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="QTextEdit" name="textEdit_8">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;meta charset="utf-8" /&gt;&lt;style type="text/css"&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: "\2610"; }
+li.checked::marker { content: "\2612"; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=" font-family:'Microsoft YaHei UI'; font-size:9pt; font-weight:400; font-style:normal;"&gt;
+&lt;h2 style=" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-size:x-large; font-weight:700;"&gt;引用第三方声明&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;本软件在功能开发、界面美化与数据处理等方面，合理引用和集成了如下第三方组件、库和资源，并严格遵循各自的开源协议：&lt;/p&gt;
+&lt;ol style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;PyQt5&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;用途：图形界面开发，负责软件的窗口布局与控件交互。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;协议：GPL / LGPL&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;matplotlib&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;用途：数据可视化，负责柱状图、饼图、折线图等统计分析图表的生成。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;协议：PSF License（Python Software Foundation）&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;sqlite3&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;用途：本地关系型数据库，负责所有业务数据的存储与管理。&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;协议：Public Domain（公有领域）&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;开源图标与图片素材&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;软件内所用的部分图标、插图、样式等素材来源于公开的开源图库，版权归原作者或社区所有，仅用于学习和非商业展示。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;其他依赖库&lt;/span&gt;
+&lt;ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;"&gt;
+&lt;li style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;可能还包含如 threading、uuid、datetime 等 Python 标准库及部分实用类库，均遵循原生许可协议。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:700;"&gt;声明&lt;/span&gt;：本项目所有第三方资源、组件的引用均已在源代码、文档中注明。若对相关使用或版权有异议，请及时联系开发者，第一时间进行整改和致谢。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources />
+ <connections />
+</ui>
