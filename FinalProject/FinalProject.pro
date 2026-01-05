@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    achievementwindow.cpp \
     annoucewindow.cpp \
     dbmanager.cpp \
     goalrecordwindow.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
     registerwindow.cpp
 
 HEADERS += \
+    achievementwindow.h \
     annoucewindow.h \
     dbmanager.h \
     goalrecordwindow.h \
@@ -30,6 +32,7 @@ HEADERS += \
     registerwindow.h
 
 FORMS += \
+    achievement_window.ui \
     annouce_window.ui \
     goal_record_window.ui \
     login_window.ui \
