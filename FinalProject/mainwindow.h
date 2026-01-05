@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPoint>
+
+#ifdef Q_OS_WIN
+#include <QByteArray>
+#endif
 #include <QString>
 
 namespace Ui {
@@ -24,6 +29,13 @@ public:
     explicit MainWindow(const QString& username, QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
+#ifdef Q_OS_WIN
+    bool nativeEvent(const QByteArray &eventType, void *message, qintptr *result) override;
+#endif
+
 signals:
     void logoutRequested();
 
@@ -31,6 +43,9 @@ private:
     void initUi();
     void initPages();
     void connectSignals();
+
+    void setupFrameless();
+    void bindWindowButtons();
 
 private slots:
     void onNavChanged(int row);
@@ -53,6 +68,10 @@ private:
     MoodCalendarWindow* m_mood = nullptr;
     QWidget* m_messagePage = nullptr; // user/admin 二选一
     AboutWindow* m_about = nullptr;
+
+    // frameless drag
+    bool m_dragging = false;
+    QPoint m_dragPos;
 };
 
 #endif // MAINWINDOW_H
