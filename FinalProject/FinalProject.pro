@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     dbmanager.cpp \
+    goalrecordwindow.cpp \
     homewindow.cpp \
     loginwindow.cpp \
     logrecordwindow.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     dbmanager.h \
+    goalrecordwindow.h \
     homewindow.h \
     loginwindow.h \
     logrecordwindow.h \
@@ -26,6 +28,7 @@ HEADERS += \
     registerwindow.h
 
 FORMS += \
+    goal_record_window.ui \
     login_window.ui \
     main_window.ui \
     mainwindow.ui \
