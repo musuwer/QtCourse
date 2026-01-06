@@ -40,7 +40,6 @@ AchievementWindow::AchievementWindow(int userId, const QString& username, const 
     , m_userId(userId)
     , m_username(username)
     , m_role(role)
-    , m_isAdmin(role == "admin")
 {
     ui->setupUi(this);
     initUi();
@@ -59,11 +58,8 @@ void AchievementWindow::initUi()
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    // 让表格列填满可用宽度
-    if (ui->tableWidget->horizontalHeader()) {
-        ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    }
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
 }
 
 void AchievementWindow::connectSignals()
@@ -79,7 +75,7 @@ void AchievementWindow::refreshData()
     ui->tableWidget->setRowCount(0);
 
     QSqlQuery q(DbManager::instance().database());
-    if (m_isAdmin) {
+    if (m_role == "admin") {
         q.prepare("SELECT id,user_id,name,type,level,org,ach_date,description FROM achievements ORDER BY id DESC");
     } else {
         q.prepare("SELECT id,user_id,name,type,level,org,ach_date,description FROM achievements WHERE user_id=? ORDER BY id DESC");
@@ -124,13 +120,12 @@ void AchievementWindow::doSearch()
     const QString col = columnNameFromComboIndex(ui->comboBox->currentIndex());
 
     QSqlQuery q(DbManager::instance().database());
-    QString sql;
-    if (m_isAdmin) {
-        sql = QString("SELECT id,user_id,name,type,level,org,ach_date,description FROM achievements WHERE %1 LIKE ? ORDER BY id DESC").arg(col);
+    if (m_role == "admin") {
+        const QString sql = QString("SELECT id,user_id,name,type,level,org,ach_date,description FROM achievements WHERE %1 LIKE ? ORDER BY id DESC").arg(col);
         q.prepare(sql);
         q.addBindValue("%" + kw + "%");
     } else {
-        sql = QString("SELECT id,user_id,name,type,level,org,ach_date,description FROM achievements WHERE user_id=? AND %1 LIKE ? ORDER BY id DESC").arg(col);
+        const QString sql = QString("SELECT id,user_id,name,type,level,org,ach_date,description FROM achievements WHERE user_id=? AND %1 LIKE ? ORDER BY id DESC").arg(col);
         q.prepare(sql);
         q.addBindValue(m_userId);
         q.addBindValue("%" + kw + "%");

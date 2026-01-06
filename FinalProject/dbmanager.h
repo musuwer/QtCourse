@@ -9,18 +9,29 @@ class DbManager
 public:
     static DbManager& instance();
 
-    // 打开 ./database.db（相对运行工作目录）
-    bool init();
+    // ✅ 固定使用：exe 同目录下的 database.db（最不容易路径错）
+    // errOut: 返回更详细的失败原因（用于弹窗提示）
+    bool init(QString* errOut = nullptr);
+
+    // 当前实际使用的数据库文件路径
+    QString databasePath() const;
     bool isOpen() const;
 
     QSqlDatabase& database();
     const QSqlDatabase& database() const;
 
-    bool createTables();
+    bool createTables(QString* errOut = nullptr);
 
     // ===== 用户 =====
-    bool registerUser(const QString& username, const QString& password, QString* errOut = nullptr);
-    bool loginUser(const QString& username, const QString& password, QString* errOut = nullptr);
+    // ✅ 明文存储（pass_hash 字段当密码字段用），login 兼容旧哈希
+    // ✅ 3参版本：默认注册普通用户
+bool registerUser(const QString& username, const QString& password, QString* errOut = nullptr);
+
+// ✅ 4参版本：兼容旧代码（registerwindow.cpp 传 role）
+// 注意：不要给 role 写默认参数，否则会和 (username,password,errOut) 调用产生歧义
+bool registerUser(const QString& username, const QString& password, const QString& role, QString* errOut = nullptr);
+bool loginUser(const QString& username, const QString& password, QString* errOut = nullptr);
+
     int  getUserId(const QString& username, QString* errOut = nullptr);
     QString getUserRole(const QString& username, QString* errOut = nullptr);
 
@@ -35,7 +46,7 @@ public:
                 int score,
                 QString* errOut = nullptr);
 
-    // 7参版本：userId + 4个QString + score + err（你 logrecordwindow.cpp 当前就是这种）
+    // 7参版本：userId + 4个QString + score + err（你的 logrecordwindow.cpp 会匹配这个）
     bool addLog(int userId,
                 const QString& s1,
                 const QString& s2,
@@ -47,7 +58,6 @@ public:
     bool deleteLogById(int logId, QString* errOut = nullptr);
 
     // ===== 目标 =====
-    // 7参：userId + 5个QString + err（你 homewindow.cpp 当前就是这种）
     bool addGoal(int userId,
                  const QString& name,
                  const QString& plan,
@@ -67,19 +77,16 @@ public:
     bool deleteAnnouncementById(int annId, QString* errOut = nullptr);
 
     // ===== 消息 =====
-    // 4参：username + target + content + err（你 messageuserwindow.cpp 当前就是这种）
     bool addMessage(const QString& username,
                     const QString& target,
                     const QString& content,
                     QString* errOut = nullptr);
 
-    // 3参：messageId + reply + err（你 messageadminwindow.cpp 当前就是这种）
     bool replyMessageById(int messageId,
                           const QString& reply,
                           QString* errOut = nullptr);
 
     // ===== 成就 =====
-    // 8参：userId + 6个QString + err（你 achievementwindow.cpp 当前就是这种）
     bool addAchievement(int userId,
                         const QString& f1,
                         const QString& f2,
@@ -91,12 +98,16 @@ public:
 
     bool deleteAchievementById(int id, QString* errOut = nullptr);
 
+    // ✅ 一键清空数据 + 重新写入默认数据（admin/admin + 示例大三用户等）
+    bool resetAndSeed(QString* errOut = nullptr);
+
 private:
     DbManager();
     ~DbManager();
 
     void setErr(QString* errOut, const QString& msg) const;
 
+    // 旧哈希兼容用（如果你数据库里已有 salt 非空的账号）
     QByteArray randomSalt(int len = 16) const;
     QString hashPassword(const QString& password, const QByteArray& salt) const;
 

@@ -8,12 +8,11 @@
 #include <QCryptographicHash>
 #include <QRandomGenerator>
 #include <QDebug>
-#include <QCoreApplication> // 用于获取应用程序路径
+#include <QCoreApplication>
+#include <QFileInfo>
+#include <QStandardPaths>
+#include <QtGlobal>
 
-/**
- * @brief 获取 DbManager 的单例对象
- * @return DbManager& 引用
- */
 DbManager& DbManager::instance()
 {
     static DbManager inst;
@@ -21,43 +20,46 @@ DbManager& DbManager::instance()
 }
 
 DbManager::DbManager() {}
-
 DbManager::~DbManager()
 {
-    if (m_db.isOpen()) {
-        m_db.close();
-    }
+    if (m_db.isOpen()) m_db.close();
 }
 
-/**
- * @brief 辅助函数：设置错误信息
- * @param errOut 错误信息输出指针
- * @param msg 错误内容
- */
 void DbManager::setErr(QString* errOut, const QString& msg) const
 {
-    if (errOut) {
-        *errOut = msg;
-        qWarning() << "[DbManager Error]" << msg; // 同时也打印到控制台，方便调试
-    }
+    if (errOut) *errOut = msg;
 }
 
-/**
- * @brief 初始化数据库连接并创建表结构
- * @return true 成功, false 失败
- */
-bool DbManager::init()
+static bool tableHasColumn(QSqlDatabase& db, const QString& table, const QString& col)
 {
-    // 如果数据库已经打开，直接返回成功
+    QSqlQuery q(db);
+    q.exec(QString("PRAGMA table_info(%1);").arg(table));
+    while (q.next()) {
+        // PRAGMA table_info: cid, name, type, notnull, dflt_value, pk
+        if (q.value(1).toString().compare(col, Qt::CaseInsensitive) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+QString DbManager::databasePath() const
+{
+    const QString baseDir = "C:/Users/musuwer/Desktop/Professional_Courses/Qt/chai_homework/Test_First_finalproject";
+    QDir().mkpath(baseDir);
+    return QDir(baseDir).absoluteFilePath("database.db");
+}
+
+
+bool DbManager::init(QString* errOut)
+{
     if (m_db.isOpen()) return true;
 
-    // 1. 确定数据库文件路径
-    // 使用应用程序所在目录，确保在不同电脑上都能找到并读写
-    const QString dbPath = QCoreApplication::applicationDirPath() + "/mood_tracker.db";
-    qDebug() << "[DB] Database path:" << dbPath;
+    // ✅ 固定使用 exe 同目录下 database.db
+    const QString dbPath = databasePath();
+    qDebug() << "[DB] using:" << dbPath;
 
-    // 2. 建立数据库连接
-    // 检查是否已经存在连接，避免 "Duplicate connection name" 错误
     if (QSqlDatabase::contains("project_db_conn")) {
         m_db = QSqlDatabase::database("project_db_conn");
     } else {
@@ -65,14 +67,36 @@ bool DbManager::init()
         m_db.setDatabaseName(dbPath);
     }
 
-    // 3. 打开数据库
     if (!m_db.open()) {
-        qCritical() << "[DB] Open failed:" << m_db.lastError().text();
+        const QString msg = m_db.lastError().text();
+        qDebug() << "[DB] open failed:" << msg;
+        setErr(errOut, msg);
         return false;
     }
 
-    // 4. 创建所需的表结构
-    return createTables();
+    if (!createTables(errOut)) return false;
+
+    // ✅ 强制确保 admin/admin 存在且可登录（兼容不同 users 表结构）
+    {
+        const bool hasPassword = tableHasColumn(m_db, "users", "password");
+        const bool hasPassHash = tableHasColumn(m_db, "users", "pass_hash");
+
+        QSqlQuery q(m_db);
+        if (hasPassword) {
+            q.exec("INSERT OR IGNORE INTO users(username, password, role, created_at) "
+                   "VALUES('admin','admin','admin', datetime('now'))");
+            q.exec("UPDATE users SET password='admin', role='admin' WHERE username='admin'");
+        } else if (hasPassHash) {
+            q.exec("INSERT OR IGNORE INTO users(username, pass_hash, salt, role, created_at) "
+                   "VALUES('admin','admin','', 'admin', datetime('now'))");
+            q.exec("UPDATE users SET pass_hash='admin', salt='', role='admin' WHERE username='admin'");
+        } else {
+            // 极端情况：users 表不是预期结构
+            qDebug() << "[DB] users table has unknown schema; cannot ensure admin account.";
+        }
+    }
+
+    return true;
 }
 
 bool DbManager::isOpen() const
@@ -90,31 +114,33 @@ const QSqlDatabase& DbManager::database() const
     return m_db;
 }
 
-/**
- * @brief 创建所有必要的数据库表
- * 使用 "IF NOT EXISTS" 避免重复创建报错
- */
-bool DbManager::createTables()
+bool DbManager::createTables(QString* errOut)
 {
-    if (!m_db.isOpen()) return false;
-    QSqlQuery q(m_db);
+    if (!m_db.isOpen()) {
+        setErr(errOut, "数据库未打开");
+        return false;
+    }
 
-    // --- 1. 用户表 (users) ---
-    // 存储用户名、密码哈希、盐值、角色
-    if (!q.exec(R"(
+    QSqlQuery q(m_db);
+    auto execSql = [&](const QString& sql) -> bool {
+        if (!q.exec(sql)) {
+            setErr(errOut, q.lastError().text());
+            return false;
+        }
+        return true;
+    };
+
+    if (!execSql(R"(
         CREATE TABLE IF NOT EXISTS users(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            pass_hash TEXT NOT NULL,
-            salt TEXT NOT NULL,
+            username TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
             role TEXT NOT NULL DEFAULT 'user',
-            created_at TEXT NOT NULL
+            created_at TEXT DEFAULT (datetime('now'))
         );
     )")) return false;
 
-    // --- 2. 日志表 (logs) ---
-    // 存储心情日志、活动、地点、时间等
-    if (!q.exec(R"(
+    if (!execSql(R"(
         CREATE TABLE IF NOT EXISTS logs(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
@@ -128,9 +154,7 @@ bool DbManager::createTables()
         );
     )")) return false;
 
-    // --- 3. 目标表 (goals) ---
-    // 存储个人目标、计划、进度
-    if (!q.exec(R"(
+    if (!execSql(R"(
         CREATE TABLE IF NOT EXISTS goals(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
@@ -143,9 +167,7 @@ bool DbManager::createTables()
         );
     )")) return false;
 
-    // --- 4. 成就表 (achievements) ---
-    // 存储获奖、证书等信息 (f1-f6 对应不同字段)
-    if (!q.exec(R"(
+    if (!execSql(R"(
         CREATE TABLE IF NOT EXISTS achievements(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
@@ -159,9 +181,7 @@ bool DbManager::createTables()
         );
     )")) return false;
 
-    // --- 5. 公告表 (announcements) ---
-    // 管理员发布的通知
-    if (!q.exec(R"(
+    if (!execSql(R"(
         CREATE TABLE IF NOT EXISTS announcements(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             author TEXT NOT NULL,
@@ -171,9 +191,7 @@ bool DbManager::createTables()
         );
     )")) return false;
 
-    // --- 6. 消息/反馈表 (messages) ---
-    // 用户反馈和管理员回复
-    if (!q.exec(R"(
+    if (!execSql(R"(
         CREATE TABLE IF NOT EXISTS messages(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL,
@@ -188,131 +206,177 @@ bool DbManager::createTables()
     return true;
 }
 
-// ================= 安全相关 (密码哈希) =================
-
-/**
- * @brief 生成随机盐值
- * @param len 盐值长度
- * @return 二进制盐值
- */
 QByteArray DbManager::randomSalt(int len) const
 {
     QByteArray s;
     s.resize(len);
     for (int i = 0; i < len; ++i) {
-        // 生成 0-255 之间的随机字节
         s[i] = static_cast<char>(QRandomGenerator::global()->bounded(0, 256));
     }
     return s;
 }
 
-/**
- * @brief 计算密码哈希 (SHA-256)
- * @param password 原始密码
- * @param salt 盐值
- * @return 十六进制哈希字符串
- */
 QString DbManager::hashPassword(const QString& password, const QByteArray& salt) const
 {
-    // 将盐值和密码拼接后进行哈希，极大增加破解难度
     QByteArray in = salt + password.toUtf8();
     QByteArray h = QCryptographicHash::hash(in, QCryptographicHash::Sha256);
     return QString::fromLatin1(h.toHex());
 }
 
-// ================= 用户管理 =================
+// ================= 用户（明文存储 + 兼容旧哈希）=================
 
 bool DbManager::registerUser(const QString& username, const QString& password, QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库初始化失败"); return false; }
+    // 3参版本：默认注册为普通用户（兼容旧调用）
+    return registerUser(username, password, QString("user"), errOut);
+}
+
+bool DbManager::registerUser(const QString& username, const QString& password, const QString& role, QString* errOut)
+{
+    if (!init(errOut)) return false;
+
     const QString u = username.trimmed();
-    if (u.isEmpty() || password.isEmpty()) { setErr(errOut, "用户名或密码不能为空"); return false; }
+    if (u.isEmpty() || password.isEmpty()) { setErr(errOut, "用户名或密码为空"); return false; }
 
-    // 1. 检查是否是第一个注册的用户，如果是则自动设为管理员
-    QString role = "user";
-    {
-        QSqlQuery cnt(m_db);
-        if (cnt.exec("SELECT COUNT(*) FROM users;") && cnt.next()) {
-            if (cnt.value(0).toInt() == 0) role = "admin";
-        }
-    }
+    // ✅ 注册页传入的 role 只允许为 user（避免用户自行注册管理员）
+    QString r = role.trimmed().toLower();
+    if (r != "user") r = "user";
 
-    // 2. 检查用户名是否已存在
+    // 重名检查
     {
         QSqlQuery ex(m_db);
         ex.prepare("SELECT 1 FROM users WHERE username=? LIMIT 1");
         ex.addBindValue(u);
-        if (ex.exec() && ex.next()) { setErr(errOut, "该用户名已被注册"); return false; }
+        if (!ex.exec()) { setErr(errOut, ex.lastError().text()); return false; }
+        if (ex.next()) { setErr(errOut, "用户名已存在"); return false; }
     }
 
-    // 3. 生成密码哈希
-    const QByteArray salt = randomSalt();
-    const QString saltHex = QString::fromLatin1(salt.toHex());
-    const QString hashHex = hashPassword(password, salt);
+    // ✅ 数据集兼容：优先写入 users.password；否则写入 pass_hash/salt（明文）
+    const bool hasPassword = tableHasColumn(m_db, "users", "password");
+    const bool hasPassHash = tableHasColumn(m_db, "users", "pass_hash");
 
-    // 4. 插入数据库
     QSqlQuery ins(m_db);
-    ins.prepare(R"(
-        INSERT INTO users(username, pass_hash, salt, role, created_at)
-        VALUES(?,?,?,?,?)
-    )");
-    ins.addBindValue(u);
-    ins.addBindValue(hashHex);
-    ins.addBindValue(saltHex);
-    ins.addBindValue(role);
-    ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
+    if (hasPassword) {
+        ins.prepare(R"(
+            INSERT INTO users(username, password, role, created_at)
+            VALUES(?,?,?,?)
+        )");
+        ins.addBindValue(u);
+        ins.addBindValue(password);
+        ins.addBindValue(r);
+        ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
+    } else if (hasPassHash) {
+        ins.prepare(R"(
+            INSERT INTO users(username, pass_hash, salt, role, created_at)
+            VALUES(?,?,?,?,?)
+        )");
+        ins.addBindValue(u);
+        ins.addBindValue(password);
+        ins.addBindValue(QString(""));
+        ins.addBindValue(r);
+        ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
+    } else {
+        setErr(errOut, "users 表结构异常：缺少 password/pass_hash 字段");
+        return false;
+    }
 
-    if (!ins.exec()) { setErr(errOut, "注册失败: " + ins.lastError().text()); return false; }
+
+    if (!ins.exec()) { setErr(errOut, ins.lastError().text()); return false; }
     return true;
 }
 
 bool DbManager::loginUser(const QString& username, const QString& password, QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库初始化失败"); return false; }
+    if (!init(errOut)) return false;
+
     const QString u = username.trimmed();
-    if (u.isEmpty() || password.isEmpty()) { setErr(errOut, "用户名或密码为空"); return false; }
+    const QString p = password; // 不强制 trimmed，避免用户密码包含空格（一般不会）
+    if (u.isEmpty() || p.isEmpty()) { setErr(errOut, "用户名或密码为空"); return false; }
 
-    // 1. 获取该用户的盐值和哈希密码
-    QSqlQuery q(m_db);
-    q.prepare("SELECT pass_hash, salt FROM users WHERE username=? LIMIT 1");
-    q.addBindValue(u);
-    if (!q.exec() || !q.next()) { setErr(errOut, "用户不存在"); return false; }
+    const bool hasPassword = tableHasColumn(m_db, "users", "password");
+    const bool hasPassHash = tableHasColumn(m_db, "users", "pass_hash");
 
-    const QString dbHash = q.value(0).toString();
-    const QByteArray salt = QByteArray::fromHex(q.value(1).toByteArray());
+    // ✅ 数据集格式：users.password
+    if (hasPassword) {
+        QSqlQuery q(m_db);
+        q.prepare("SELECT password FROM users WHERE username=? LIMIT 1");
+        q.addBindValue(u);
+        if (!q.exec()) { setErr(errOut, q.lastError().text()); return false; }
+        if (!q.next()) { setErr(errOut, "用户不存在"); return false; }
 
-    // 2. 使用相同的盐值计算输入密码的哈希，并比对
-    const QString nowHash = hashPassword(password, salt);
-    if (nowHash != dbHash) { setErr(errOut, "密码错误"); return false; }
+        const QString stored = q.value(0).toString();
+        if (stored == p) return true;
 
-    return true;
+        setErr(errOut, "密码错误");
+        return false;
+    }
+
+    // ✅ 兼容旧库：users.pass_hash + users.salt（salt 为空视为明文）
+    if (hasPassHash) {
+        QSqlQuery q(m_db);
+        q.prepare("SELECT pass_hash, salt FROM users WHERE username=? LIMIT 1");
+        q.addBindValue(u);
+        if (!q.exec()) { setErr(errOut, q.lastError().text()); return false; }
+        if (!q.next()) { setErr(errOut, "用户不存在"); return false; }
+
+        const QString stored = q.value(0).toString();
+        const QString saltHex = q.value(1).toString();
+
+        if (saltHex.trimmed().isEmpty()) {
+            if (stored == p) return true;
+            setErr(errOut, "密码错误");
+            return false;
+        }
+
+        const QByteArray salt = QByteArray::fromHex(saltHex.toLatin1());
+        const QString nowHash = hashPassword(p, salt);
+        if (nowHash == stored) return true;
+
+        setErr(errOut, "密码错误");
+        return false;
+    }
+
+    setErr(errOut, "users 表结构异常：缺少 password/pass_hash 字段");
+    return false;
 }
 
 int DbManager::getUserId(const QString& username, QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return -1; }
+    if (!init(errOut)) return -1;
 
     QSqlQuery q(m_db);
     q.prepare("SELECT id FROM users WHERE username=? LIMIT 1");
     q.addBindValue(username.trimmed());
-    if (!q.exec() || !q.next()) { setErr(errOut, "未找到该用户ID"); return -1; }
+    if (!q.exec() || !q.next()) { setErr(errOut, "未找到用户"); return -1; }
     return q.value(0).toInt();
 }
 
 QString DbManager::getUserRole(const QString& username, QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return "user"; }
+    if (!init(errOut)) return "user";
 
     QSqlQuery q(m_db);
     q.prepare("SELECT role FROM users WHERE username=? LIMIT 1");
     q.addBindValue(username.trimmed());
-    if (!q.exec() || !q.next()) { setErr(errOut, "未找到该用户角色"); return "user"; }
-    return q.value(0).toString();
+    if (!q.exec() || !q.next()) { setErr(errOut, "未找到用户"); return "user"; }
+
+    // ✅ 统一角色字符串，避免出现 "Admin"、"admin "、"管理员" 导致判断失败
+    const QString raw = q.value(0).toString();
+    QString r = raw.trimmed();
+    if (r.isEmpty()) return "user";
+
+    const QString lower = r.toLower();
+    // 常见管理员写法统一映射为 "admin"
+    if (lower == "admin" || lower == "administrator" || r == QStringLiteral("管理员")) {
+        return "admin";
+    }
+
+    // 默认：非管理员一律视为普通用户（避免未知 role 导致权限穿透）
+    return "user";
 }
 
-// ================= 日志管理 (Logs) =================
+// ================= 日志 =================
 
-// 完整版：包含 content 字段
 bool DbManager::addLog(int userId,
                        const QString& name,
                        const QString& type,
@@ -322,7 +386,7 @@ bool DbManager::addLog(int userId,
                        int score,
                        QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery ins(m_db);
     ins.prepare(R"(
@@ -338,11 +402,10 @@ bool DbManager::addLog(int userId,
     ins.addBindValue(score);
     ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-    if (!ins.exec()) { setErr(errOut, "添加日志失败: " + ins.lastError().text()); return false; }
+    if (!ins.exec()) { setErr(errOut, ins.lastError().text()); return false; }
     return true;
 }
 
-// 简化版：不含 content (用于旧接口兼容)
 bool DbManager::addLog(int userId,
                        const QString& s1,
                        const QString& s2,
@@ -351,22 +414,21 @@ bool DbManager::addLog(int userId,
                        int score,
                        QString* errOut)
 {
-    // 调用完整版，将 content 设为空字符串
     return addLog(userId, s1, s2, s3, s4, QString(), score, errOut);
 }
 
 bool DbManager::deleteLogById(int logId, QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery q(m_db);
     q.prepare("DELETE FROM logs WHERE id=?");
     q.addBindValue(logId);
-    if (!q.exec()) { setErr(errOut, "删除日志失败: " + q.lastError().text()); return false; }
+    if (!q.exec()) { setErr(errOut, q.lastError().text()); return false; }
     return true;
 }
 
-// ================= 目标管理 (Goals) =================
+// ================= 目标 =================
 
 bool DbManager::addGoal(int userId,
                         const QString& name,
@@ -376,7 +438,7 @@ bool DbManager::addGoal(int userId,
                         const QString& deadline,
                         QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery ins(m_db);
     ins.prepare(R"(
@@ -391,29 +453,29 @@ bool DbManager::addGoal(int userId,
     ins.addBindValue(deadline);
     ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-    if (!ins.exec()) { setErr(errOut, "添加目标失败: " + ins.lastError().text()); return false; }
+    if (!ins.exec()) { setErr(errOut, ins.lastError().text()); return false; }
     return true;
 }
 
 bool DbManager::deleteGoalById(int goalId, QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery q(m_db);
     q.prepare("DELETE FROM goals WHERE id=?");
     q.addBindValue(goalId);
-    if (!q.exec()) { setErr(errOut, "删除目标失败: " + q.lastError().text()); return false; }
+    if (!q.exec()) { setErr(errOut, q.lastError().text()); return false; }
     return true;
 }
 
-// ================= 公告管理 (Announcements) =================
+// ================= 公告 =================
 
 bool DbManager::addAnnouncement(const QString& author,
                                 const QString& title,
                                 const QString& content,
                                 QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery ins(m_db);
     ins.prepare(R"(
@@ -425,29 +487,29 @@ bool DbManager::addAnnouncement(const QString& author,
     ins.addBindValue(content);
     ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-    if (!ins.exec()) { setErr(errOut, "发布公告失败: " + ins.lastError().text()); return false; }
+    if (!ins.exec()) { setErr(errOut, ins.lastError().text()); return false; }
     return true;
 }
 
 bool DbManager::deleteAnnouncementById(int annId, QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery q(m_db);
     q.prepare("DELETE FROM announcements WHERE id=?");
     q.addBindValue(annId);
-    if (!q.exec()) { setErr(errOut, "删除公告失败: " + q.lastError().text()); return false; }
+    if (!q.exec()) { setErr(errOut, q.lastError().text()); return false; }
     return true;
 }
 
-// ================= 消息反馈 (Messages) =================
+// ================= 消息 =================
 
 bool DbManager::addMessage(const QString& username,
                            const QString& target,
                            const QString& content,
                            QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery ins(m_db);
     ins.prepare(R"(
@@ -459,7 +521,7 @@ bool DbManager::addMessage(const QString& username,
     ins.addBindValue(content);
     ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-    if (!ins.exec()) { setErr(errOut, "发送消息失败: " + ins.lastError().text()); return false; }
+    if (!ins.exec()) { setErr(errOut, ins.lastError().text()); return false; }
     return true;
 }
 
@@ -467,7 +529,7 @@ bool DbManager::replyMessageById(int messageId,
                                  const QString& reply,
                                  QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery q(m_db);
     q.prepare("UPDATE messages SET reply=?, replied_at=? WHERE id=?");
@@ -475,11 +537,11 @@ bool DbManager::replyMessageById(int messageId,
     q.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
     q.addBindValue(messageId);
 
-    if (!q.exec()) { setErr(errOut, "回复消息失败: " + q.lastError().text()); return false; }
+    if (!q.exec()) { setErr(errOut, q.lastError().text()); return false; }
     return true;
 }
 
-// ================= 成就管理 (Achievements) =================
+// ================= 成就 =================
 
 bool DbManager::addAchievement(int userId,
                                const QString& f1,
@@ -490,7 +552,7 @@ bool DbManager::addAchievement(int userId,
                                const QString& f6,
                                QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery ins(m_db);
     ins.prepare(R"(
@@ -506,17 +568,112 @@ bool DbManager::addAchievement(int userId,
     ins.addBindValue(f6);
     ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-    if (!ins.exec()) { setErr(errOut, "添加成就失败: " + ins.lastError().text()); return false; }
+    if (!ins.exec()) { setErr(errOut, ins.lastError().text()); return false; }
     return true;
 }
 
 bool DbManager::deleteAchievementById(int id, QString* errOut)
 {
-    if (!init()) { setErr(errOut, "数据库未打开"); return false; }
+    if (!init(errOut)) return false;
 
     QSqlQuery q(m_db);
     q.prepare("DELETE FROM achievements WHERE id=?");
     q.addBindValue(id);
-    if (!q.exec()) { setErr(errOut, "删除成就失败: " + q.lastError().text()); return false; }
+    if (!q.exec()) { setErr(errOut, q.lastError().text()); return false; }
+    return true;
+}
+
+// ================= 一键清空并重置默认数据 =================
+
+bool DbManager::resetAndSeed(QString* errOut)
+{
+    if (!init(errOut)) return false;
+
+    QSqlQuery q(m_db);
+    if (!q.exec("DELETE FROM messages;")) { setErr(errOut, q.lastError().text()); return false; }
+    if (!q.exec("DELETE FROM announcements;")) { setErr(errOut, q.lastError().text()); return false; }
+    if (!q.exec("DELETE FROM achievements;")) { setErr(errOut, q.lastError().text()); return false; }
+    if (!q.exec("DELETE FROM goals;")) { setErr(errOut, q.lastError().text()); return false; }
+    if (!q.exec("DELETE FROM logs;")) { setErr(errOut, q.lastError().text()); return false; }
+    if (!q.exec("DELETE FROM users;")) { setErr(errOut, q.lastError().text()); return false; }
+
+    const bool hasPassword = tableHasColumn(m_db, "users", "password");
+    const bool hasPassHash = tableHasColumn(m_db, "users", "pass_hash");
+
+    // admin/admin
+    if (hasPassword) {
+        if (!q.exec("INSERT INTO users(username, password, role, created_at) "
+                    "VALUES('admin','admin', 'admin', datetime('now'))")) {
+            setErr(errOut, q.lastError().text());
+            return false;
+        }
+    } else if (hasPassHash) {
+        if (!q.exec("INSERT INTO users(username, pass_hash, salt, role, created_at) "
+                    "VALUES('admin','admin','', 'admin', datetime('now'))")) {
+            setErr(errOut, q.lastError().text());
+            return false;
+        }
+    } else {
+        setErr(errOut, "users 表结构异常：缺少 password/pass_hash 字段");
+        return false;
+    }
+
+    // 示例用户：大三学生
+    if (hasPassword) {
+        if (!q.exec("INSERT INTO users(username, password, role, created_at) "
+                    "VALUES('chenyu','123456', 'user', datetime('now'))")) {
+            setErr(errOut, q.lastError().text());
+            return false;
+        }
+    } else {
+        if (!q.exec("INSERT INTO users(username, pass_hash, salt, role, created_at) "
+                    "VALUES('chenyu','123456','', 'user', datetime('now'))")) {
+            setErr(errOut, q.lastError().text());
+            return false;
+        }
+    }
+
+    // 公告
+    q.exec("INSERT INTO announcements(author,title,content,created_at) VALUES('admin','系统使用说明','账号：admin/admin。示例学生：chenyu/123456。可以添加日志、目标、成就、留言。', datetime('now'))");
+    q.exec("INSERT INTO announcements(author,title,content,created_at) VALUES('admin','本周提醒','记得完成Qt课程设计报告、整理截图并录屏演示。', datetime('now'))");
+    q.exec("INSERT INTO announcements(author,title,content,created_at) VALUES('admin','假期计划','每天至少学习2小时：Qt+数据库+项目文档。', datetime('now'))");
+
+    // 目标
+    const int uid = getUserId("chenyu");
+    {
+        QSqlQuery ins(m_db);
+        ins.prepare("INSERT INTO goals(user_id,name,plan,progress,start,deadline,created_at) VALUES(?,?,?,?,?,?,datetime('now'))");
+        ins.addBindValue(uid);
+        ins.addBindValue("Qt课程设计冲刺");
+        ins.addBindValue("完善登录/注册/数据库联动；完成主页面数据展示；录屏演示");
+        ins.addBindValue("进行中 60%");
+        ins.addBindValue("2026-01-01");
+        ins.addBindValue("2026-01-08");
+        ins.exec();
+    }
+
+    // 日志
+    {
+        addLog(uid, "图书馆自习", "学习", "图书馆三楼", "2026-01-03 19:00", "复习Qt信号槽和SQLite接口。", 4, nullptr);
+        addLog(uid, "小组讨论", "项目", "线上会议", "2026-01-02 21:00", "确认UI控件命名与数据库字段映射。", 5, nullptr);
+    }
+
+    // 成就
+    {
+        QSqlQuery ins(m_db);
+        ins.prepare("INSERT INTO achievements(user_id,f1,f2,f3,f4,f5,f6,created_at) VALUES(?,?,?,?,?,?,?,datetime('now'))");
+        ins.addBindValue(uid);
+        ins.addBindValue("完成登录注册流程");
+        ins.addBindValue("数据库可持久化");
+        ins.addBindValue("公告/目标/日志数据可展示");
+        ins.addBindValue("完成一次演示录屏");
+        ins.addBindValue("完成报告初稿");
+        ins.addBindValue("完成最终提交");
+        ins.exec();
+    }
+
+    // 留言 + 管理员回复
+    q.exec("INSERT INTO messages(username,target,content,reply,created_at,replied_at) VALUES('chenyu','[ALL]','管理员你好，登录注册功能我已经调通了，后续准备完善日志页面。','收到，注意控件名和ui一致，最后记得Clean+qmake再打包提交。', datetime('now'), datetime('now'))");
+
     return true;
 }

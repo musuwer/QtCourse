@@ -36,7 +36,6 @@ private:
     int m_userId = -1;
     QString m_username;
     QString m_role;
-    bool m_isAdmin = false;
 };
 
 #endif // ACHIEVEMENTWINDOW_H
