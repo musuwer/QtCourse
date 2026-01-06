@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>AchievementWindow</class>
  <widget class="QWidget" name="AchievementWindow">
@@ -41,10 +41,10 @@
       <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_9">
       <property name="spacing">
@@ -71,10 +71,10 @@
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Shadow::Raised</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_11">
          <property name="spacing">
@@ -97,10 +97,10 @@
            <item>
             <widget class="QFrame" name="frame_9">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Shape::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <property name="spacing">
@@ -126,7 +126,7 @@
                 <item>
                  <spacer name="horizontalSpacer_5">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -164,14 +164,14 @@
                     <property name="styleSheet">
                      <string notr="true">image: url(:/icons/res1/icons/announce.png);
 image: url(:/icons/res1/icons/Crown.png);
-font: 15pt "Agency FB";</string>
+font: 15pt &quot;Agency FB&quot;;</string>
                     </property>
                     <property name="text">
-                     <string />
+                     <string/>
                     </property>
                    </widget>
                   </item>
-                  <item alignment="Qt::AlignHCenter">
+                  <item alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="label_3">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -180,7 +180,7 @@ font: 15pt "Agency FB";</string>
                      </sizepolicy>
                     </property>
                     <property name="styleSheet">
-                     <string notr="true">font: 700 12pt "Agency FB";</string>
+                     <string notr="true">font: 700 12pt &quot;Agency FB&quot;;</string>
                     </property>
                     <property name="text">
                      <string>金章耀华笺</string>
@@ -192,7 +192,7 @@ font: 15pt "Agency FB";</string>
                 <item>
                  <spacer name="horizontalSpacer_6">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -227,10 +227,10 @@ font: 15pt "Agency FB";</string>
 }</string>
              </property>
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Shape::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
@@ -251,10 +251,10 @@ font: 15pt "Agency FB";</string>
 }</string>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
                 <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_17">
                  <property name="spacing">
@@ -278,10 +278,10 @@ font: 15pt "Agency FB";</string>
                     <string notr="true">border-radius:30px;</string>
                    </property>
                    <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                    <enum>QFrame::Shape::StyledPanel</enum>
                    </property>
                    <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
+                    <enum>QFrame::Shadow::Raised</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_7">
                     <item>
@@ -321,7 +321,7 @@ border:none</string>
                         </property>
                        </widget>
                       </item>
-                      <item alignment="Qt::AlignRight">
+                      <item alignment="Qt::AlignmentFlag::AlignRight">
                        <widget class="QComboBox" name="comboBox">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -344,7 +344,7 @@ border:none</string>
                          </font>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">font: 12pt "宋体"; 
+                         <string notr="true">font: 12pt &quot;宋体&quot;; 
 </string>
                         </property>
                         <item>
@@ -389,7 +389,7 @@ border:none</string>
                     <item>
                      <spacer name="horizontalSpacer">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                       <enum>Qt::Orientation::Horizontal</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -417,7 +417,7 @@ border:none</string>
                         </property>
                        </widget>
                       </item>
-                      <item alignment="Qt::AlignHCenter">
+                      <item alignment="Qt::AlignmentFlag::AlignHCenter">
                        <widget class="QLineEdit" name="search_lineEdit">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -426,7 +426,7 @@ border:none</string>
                          </sizepolicy>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">font: 12pt "宋体";</string>
+                         <string notr="true">font: 12pt &quot;宋体&quot;;</string>
                         </property>
                         <property name="placeholderText">
                          <string>请搜索</string>
@@ -469,7 +469,7 @@ border:none</string>
                     <item>
                      <spacer name="horizontalSpacer_2">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                       <enum>Qt::Orientation::Horizontal</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -545,6 +545,35 @@ border:none</string>
                         </property>
                        </widget>
                       </item>
+                      <item>
+                       <widget class="QPushButton" name="export_csv_pushButton">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">#export_csv_pushButton:hover{
+    background-color: rgb(196, 196, 196);
+    border-radius:8px;
+    color: rgb(0, 0, 0);
+}
+#export_csv_pushButton:pressed{
+    padding-top:3px;
+    padding-left:3px;
+}
+</string>
+                        </property>
+                        <property name="text">
+                         <string>导出CSV</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="res1.qrc">
+                          <normaloff>:/icons/res1/icons/Exportfile.png</normaloff>:/icons/res1/icons/Exportfile.png</iconset>
+                        </property>
+                       </widget>
+                      </item>
                      </layout>
                     </item>
                    </layout>
@@ -565,16 +594,16 @@ border:none</string>
                  <string notr="true">border-radius:30px;</string>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
                 <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_4">
                  <item>
                   <widget class="QTableWidget" name="tableWidget">
                    <property name="styleSheet">
-                    <string notr="true">font: 12pt "宋体";</string>
+                    <string notr="true">font: 12pt &quot;宋体&quot;;</string>
                    </property>
                    <column>
                     <property name="text">
@@ -633,10 +662,10 @@ border:none</string>
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Shadow::Raised</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_10">
          <property name="spacing">
@@ -665,10 +694,10 @@ border:none</string>
               </sizepolicy>
              </property>
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Shape::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_14">
               <property name="spacing">
@@ -694,7 +723,7 @@ border:none</string>
                 <item>
                  <spacer name="horizontalSpacer_11">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -732,14 +761,14 @@ border:none</string>
                     <property name="styleSheet">
                      <string notr="true">
 image: url(:/icons/res1/icons/data_image.png);
-font: 15pt "Agency FB";</string>
+font: 15pt &quot;Agency FB&quot;;</string>
                     </property>
                     <property name="text">
-                     <string />
+                     <string/>
                     </property>
                    </widget>
                   </item>
-                  <item alignment="Qt::AlignHCenter">
+                  <item alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="label_10">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -748,7 +777,7 @@ font: 15pt "Agency FB";</string>
                      </sizepolicy>
                     </property>
                     <property name="styleSheet">
-                     <string notr="true">font: 700 12pt "Agency FB";</string>
+                     <string notr="true">font: 700 12pt &quot;Agency FB&quot;;</string>
                     </property>
                     <property name="text">
                      <string>数象凝画轴</string>
@@ -760,7 +789,7 @@ font: 15pt "Agency FB";</string>
                 <item>
                  <spacer name="horizontalSpacer_12">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -788,10 +817,10 @@ font: 15pt "Agency FB";</string>
 background-color: rgb(255, 255, 255);</string>
              </property>
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Shape::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_9">
               <property name="spacing">
@@ -822,10 +851,10 @@ background-color: rgb(255, 255, 255);</string>
 border-radius:30px;</string>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
                 <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_5">
                  <item>
@@ -841,10 +870,10 @@ border-radius:30px;</string>
 background-color: rgb(255, 255, 255);</string>
                    </property>
                    <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                    <enum>QFrame::Shape::StyledPanel</enum>
                    </property>
                    <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
+                    <enum>QFrame::Shadow::Raised</enum>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_2">
                     <item>
@@ -852,17 +881,17 @@ background-color: rgb(255, 255, 255);</string>
                       <item>
                        <widget class="QFrame" name="frame_10">
                         <property name="frameShape">
-                         <enum>QFrame::StyledPanel</enum>
+                         <enum>QFrame::Shape::StyledPanel</enum>
                         </property>
                         <property name="frameShadow">
-                         <enum>QFrame::Raised</enum>
+                         <enum>QFrame::Shadow::Raised</enum>
                         </property>
                        </widget>
                       </item>
                       <item>
                        <spacer name="horizontalSpacer_4">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -877,7 +906,7 @@ background-color: rgb(255, 255, 255);</string>
                         <property name="spacing">
                          <number>6</number>
                         </property>
-                        <item alignment="Qt::AlignHCenter">
+                        <item alignment="Qt::AlignmentFlag::AlignHCenter">
                          <widget class="QLabel" name="label_2">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -894,14 +923,14 @@ background-color: rgb(255, 255, 255);</string>
                           <property name="styleSheet">
                            <string notr="true">image: url(:/icons/res1/icons/bar.png);
 
-font: 15pt "Agency FB";</string>
+font: 15pt &quot;Agency FB&quot;;</string>
                           </property>
                           <property name="text">
-                           <string />
+                           <string/>
                           </property>
                          </widget>
                         </item>
-                        <item alignment="Qt::AlignHCenter">
+                        <item alignment="Qt::AlignmentFlag::AlignHCenter">
                          <widget class="QLabel" name="label_4">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -910,7 +939,7 @@ font: 15pt "Agency FB";</string>
                            </sizepolicy>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">font: 700 12pt "Agency FB";</string>
+                           <string notr="true">font: 700 12pt &quot;Agency FB&quot;;</string>
                           </property>
                           <property name="text">
                            <string>柱状图</string>
@@ -922,7 +951,7 @@ font: 15pt "Agency FB";</string>
                       <item>
                        <spacer name="horizontalSpacer_3">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -943,7 +972,7 @@ font: 15pt "Agency FB";</string>
                        </sizepolicy>
                       </property>
                       <property name="styleSheet">
-                       <string notr="true" />
+                       <string notr="true"/>
                       </property>
                      </widget>
                     </item>
@@ -967,10 +996,10 @@ background-color: qconicalgradient(cx:0, cy:0, angle:129.4, stop:0.136364 rgba(2
 border-radius:30px;</string>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
                 <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_6">
                  <item>
@@ -986,10 +1015,10 @@ border-radius:30px;</string>
 background-color: rgb(255, 255, 255);</string>
                    </property>
                    <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                    <enum>QFrame::Shape::StyledPanel</enum>
                    </property>
                    <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
+                    <enum>QFrame::Shadow::Raised</enum>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_7">
                     <item>
@@ -997,17 +1026,17 @@ background-color: rgb(255, 255, 255);</string>
                       <item>
                        <widget class="QFrame" name="frame_15">
                         <property name="frameShape">
-                         <enum>QFrame::StyledPanel</enum>
+                         <enum>QFrame::Shape::StyledPanel</enum>
                         </property>
                         <property name="frameShadow">
-                         <enum>QFrame::Raised</enum>
+                         <enum>QFrame::Shadow::Raised</enum>
                         </property>
                        </widget>
                       </item>
                       <item>
                        <spacer name="horizontalSpacer_7">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -1022,7 +1051,7 @@ background-color: rgb(255, 255, 255);</string>
                         <property name="spacing">
                          <number>6</number>
                         </property>
-                        <item alignment="Qt::AlignHCenter">
+                        <item alignment="Qt::AlignmentFlag::AlignHCenter">
                          <widget class="QLabel" name="label_7">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1039,14 +1068,14 @@ background-color: rgb(255, 255, 255);</string>
                           <property name="styleSheet">
                            <string notr="true">image: url(:/icons/res1/icons/bar.png);
 image: url(:/icons/res1/icons/Sector.png);
-font: 15pt "Agency FB";</string>
+font: 15pt &quot;Agency FB&quot;;</string>
                           </property>
                           <property name="text">
-                           <string />
+                           <string/>
                           </property>
                          </widget>
                         </item>
-                        <item alignment="Qt::AlignHCenter">
+                        <item alignment="Qt::AlignmentFlag::AlignHCenter">
                          <widget class="QLabel" name="label_8">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1055,7 +1084,7 @@ font: 15pt "Agency FB";</string>
                            </sizepolicy>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">font: 700 12pt "Agency FB";</string>
+                           <string notr="true">font: 700 12pt &quot;Agency FB&quot;;</string>
                           </property>
                           <property name="text">
                            <string>扇形图</string>
@@ -1067,7 +1096,7 @@ font: 15pt "Agency FB";</string>
                       <item>
                        <spacer name="horizontalSpacer_8">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Orientation::Horizontal</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
@@ -1088,7 +1117,7 @@ font: 15pt "Agency FB";</string>
                        </sizepolicy>
                       </property>
                       <property name="styleSheet">
-                       <string notr="true" />
+                       <string notr="true"/>
                       </property>
                      </widget>
                     </item>
@@ -1112,7 +1141,7 @@ font: 15pt "Agency FB";</string>
   </layout>
  </widget>
  <resources>
-  <include location="res1.qrc" />
+  <include location="res1.qrc"/>
  </resources>
- <connections />
+ <connections/>
 </ui>

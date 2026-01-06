@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>HomeWindow</class>
  <widget class="QWidget" name="HomeWindow">
@@ -35,10 +35,10 @@
       <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
@@ -81,10 +81,10 @@
 }</string>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
+           <enum>QFrame::Shadow::Raised</enum>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
            <property name="spacing">
@@ -116,10 +116,10 @@ border-radius:30px
 </string>
              </property>
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Shape::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_12" stretch="0">
               <property name="spacing">
@@ -169,16 +169,16 @@ border-radius:30px
 </string>
              </property>
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Shape::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_10">
               <item>
                <widget class="QWidget" name="boat_widget" native="true">
                 <property name="styleSheet">
-                 <string notr="true" />
+                 <string notr="true"/>
                 </property>
                </widget>
               </item>
@@ -204,10 +204,10 @@ background-color: rgb(255, 209, 102);
 background-color: rgb(253, 107, 23);</string>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
+           <enum>QFrame::Shadow::Raised</enum>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
@@ -224,10 +224,10 @@ background-color: rgb(253, 107, 23);</string>
                 </sizepolicy>
                </property>
                <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
+                <enum>QFrame::Shape::StyledPanel</enum>
                </property>
                <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
+                <enum>QFrame::Shadow::Raised</enum>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <property name="spacing">
@@ -265,10 +265,10 @@ background-color: rgb(253, 107, 23);</string>
                       </property>
                       <property name="styleSheet">
                        <string notr="true">image: url(:/icons/res1/icons/announce.png);
-font: 15pt "Agency FB";</string>
+font: 15pt &quot;Agency FB&quot;;</string>
                       </property>
                       <property name="text">
-                       <string />
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -293,7 +293,7 @@ font: 15pt "Agency FB";</string>
                   <item>
                    <spacer name="horizontalSpacer">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -316,7 +316,7 @@ font: 15pt "Agency FB";</string>
                   <item>
                    <spacer name="horizontalSpacer_2">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -408,10 +408,10 @@ font: 15pt "Agency FB";</string>
                 </sizepolicy>
                </property>
                <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
+                <enum>QFrame::Shape::StyledPanel</enum>
                </property>
                <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
+                <enum>QFrame::Shadow::Raised</enum>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_6">
                 <property name="spacing">
@@ -437,10 +437,10 @@ font: 15pt "Agency FB";</string>
                   <item>
                    <widget class="QFrame" name="frame_6">
                     <property name="frameShape">
-                     <enum>QFrame::StyledPanel</enum>
+                     <enum>QFrame::Shape::StyledPanel</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Raised</enum>
+                     <enum>QFrame::Shadow::Raised</enum>
                     </property>
                    </widget>
                   </item>
@@ -493,10 +493,10 @@ border-radius:30px;</string>
 border-radius:30px;</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Shadow::Raised</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_10">
          <item>
@@ -513,10 +513,10 @@ border-radius:30px;</string>
               </sizepolicy>
              </property>
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Shape::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
               <property name="spacing">
@@ -552,10 +552,10 @@ border-radius:30px;</string>
                     <property name="styleSheet">
                      <string notr="true">image: url(:/icons/res1/icons/announce.png);
 image: url(:/icons/res1/icons/goal.png);
-font: 15pt "Agency FB";</string>
+font: 15pt &quot;Agency FB&quot;;</string>
                     </property>
                     <property name="text">
-                     <string />
+                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -569,7 +569,7 @@ font: 15pt "Agency FB";</string>
                     </property>
                     <property name="styleSheet">
                      <string notr="true">color: rgb(255, 255, 255);
-font: 12pt "Agency FB";</string>
+font: 12pt &quot;Agency FB&quot;;</string>
                     </property>
                     <property name="text">
                      <string>目标记录</string>
@@ -581,7 +581,7 @@ font: 12pt "Agency FB";</string>
                 <item>
                  <spacer name="horizontalSpacer_3">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -595,7 +595,7 @@ font: 12pt "Agency FB";</string>
                  <widget class="QLabel" name="totol_goal_label">
                   <property name="styleSheet">
                    <string notr="true">color: rgb(255, 255, 255);
-font: 12pt "Microsoft YaHei UI";</string>
+font: 12pt &quot;Microsoft YaHei UI&quot;;</string>
                   </property>
                   <property name="text">
                    <string>TextLabel</string>
@@ -605,7 +605,7 @@ font: 12pt "Microsoft YaHei UI";</string>
                 <item>
                  <spacer name="horizontalSpacer_4">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -690,6 +690,35 @@ font: 12pt "Microsoft YaHei UI";</string>
                     </property>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QPushButton" name="export_goal_csv_pushButton">
+                    <property name="styleSheet">
+                     <string notr="true">#export_goal_csv_pushButton{
+    color: rgb(255, 255, 255);
+}
+#export_goal_csv_pushButton:hover{
+    background-color: rgb(196, 196, 196);
+    border-radius:8px;
+    color: rgb(0, 0, 0);
+}
+#export_goal_csv_pushButton:pressed{
+    padding-top:3px;
+    padding-left:3px;
+}
+
+
+
+</string>
+                    </property>
+                    <property name="text">
+                     <string>导出CSV</string>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="res1.qrc">
+                      <normaloff>:/icons/res1/icons/Exportfile.png</normaloff>:/icons/res1/icons/Exportfile.png</iconset>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </item>
                </layout>
@@ -711,10 +740,10 @@ border-radius:30px;
 </string>
              </property>
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Shape::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Shadow::Raised</enum>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_8">
               <property name="spacing">
@@ -745,10 +774,10 @@ border-radius:30px;
 </string>
                   </property>
                   <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
+                   <enum>QFrame::Shape::StyledPanel</enum>
                   </property>
                   <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
+                   <enum>QFrame::Shadow::Raised</enum>
                   </property>
                  </widget>
                 </item>
@@ -807,7 +836,7 @@ border-radius:30px;
   </layout>
  </widget>
  <resources>
-  <include location="res1.qrc" />
+  <include location="res1.qrc"/>
  </resources>
- <connections />
+ <connections/>
 </ui>

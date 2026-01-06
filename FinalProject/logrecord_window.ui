@@ -540,7 +540,6 @@ border:none</string>
                              </property>
                             </widget>
                            </item>
-
                            <item>
                             <widget class="QPushButton" name="export_csv_pushButton">
                              <property name="sizePolicy">
@@ -562,6 +561,10 @@ border:none</string>
                              </property>
                              <property name="text">
                               <string>导出CSV</string>
+                             </property>
+                             <property name="icon">
+                              <iconset resource="res1.qrc">
+                               <normaloff>:/icons/res1/icons/Exportfile.png</normaloff>:/icons/res1/icons/Exportfile.png</iconset>
                              </property>
                             </widget>
                            </item>
