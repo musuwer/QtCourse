@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     aboutwindow.cpp \
     achievementwindow.cpp \
+    addlogwindow.cpp \
     annoucewindow.cpp \
     dbmanager.cpp \
     goalrecordwindow.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 HEADERS += \
     aboutwindow.h \
     achievementwindow.h \
+    addlogwindow.h \
     annoucewindow.h \
     dbmanager.h \
     goalrecordwindow.h \
@@ -38,6 +40,7 @@ HEADERS += \
 FORMS += \
     about_window.ui \
     achievement_window.ui \
+    add_log_window.ui \
     annouce_window.ui \
     goal_record_window.ui \
     login_window.ui \
