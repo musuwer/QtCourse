@@ -16,7 +16,7 @@ class LogRecordWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit LogRecordWindow(int userId, const QString& username, QWidget *parent = nullptr);
+    explicit LogRecordWindow(int userId, const QString& username, const QString& role, QWidget *parent = nullptr);
     ~LogRecordWindow();
 
 public slots:
@@ -31,6 +31,7 @@ private slots:
     void onAddLogClicked();
     void onRefreshClicked();
     void onSearchClicked();
+    void onExportCsvClicked();
 
     void onTableContextMenuRequested(const QPoint& pos);
 
@@ -38,6 +39,7 @@ private:
     Ui::LogRecordWindow *ui;
     int m_userId = -1;
     QString m_username;
+    QString m_role;
 
     QSqlTableModel* m_model = nullptr;
     QSortFilterProxyModel* m_proxy = nullptr;

@@ -6,7 +6,15 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QHeaderView>
+#include <QFrame>
 #include <QDate>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
+#include <QStringConverter>
+#include <QDateTime>
+#include <QVector>
+#include <QDir>
 
 #include "dbmanager.h"
 #include "addlogwindow.h"
@@ -44,11 +52,12 @@ static int safeToInt(const QString& s, int def)
 
 }
 
-LogRecordWindow::LogRecordWindow(int userId, const QString& username, QWidget *parent)
+LogRecordWindow::LogRecordWindow(int userId, const QString& username, const QString& role, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::LogRecordWindow)
     , m_userId(userId)
     , m_username(username)
+    , m_role(role)
 {
     ui->setupUi(this);
     initUi();
@@ -63,10 +72,18 @@ LogRecordWindow::~LogRecordWindow()
 
 void LogRecordWindow::initUi()
 {
+    // 让 tableView 刚好填满 frame（去掉布局默认边距）
+    if (ui->horizontalLayout_4) {
+        ui->horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
+        ui->horizontalLayout_4->setSpacing(0);
+    }
+
     // tableView 基础设置
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableView->setFrameShape(QFrame::NoFrame);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -74,7 +91,11 @@ void LogRecordWindow::initUi()
     m_model = new QSqlTableModel(this, DbManager::instance().database());
     m_model->setTable("logs");
     m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    m_model->setFilter(QString("user_id=%1").arg(m_userId));
+    if (m_role != "admin") {
+        m_model->setFilter(QString("user_id=%1").arg(m_userId));
+    } else {
+        m_model->setFilter(QString());
+    }
     m_model->select();
 
     // headers
@@ -85,6 +106,7 @@ void LogRecordWindow::initUi()
     m_model->setHeaderData(5, Qt::Horizontal, "日期");
     m_model->setHeaderData(6, Qt::Horizontal, "情绪评分");
     m_model->setHeaderData(7, Qt::Horizontal, "创建时间");
+    m_model->setHeaderData(1, Qt::Horizontal, "用户ID");
 
     m_proxy = new LogFilterProxyModel(this);
     m_proxy->setSourceModel(m_model);
@@ -92,7 +114,9 @@ void LogRecordWindow::initUi()
     ui->tableView->setModel(m_proxy);
     // 隐藏 id/user_id
     ui->tableView->hideColumn(0);
-    ui->tableView->hideColumn(1);
+    if (m_role != "admin") {
+        ui->tableView->hideColumn(1);
+    }
 
     updateCountLabel();
 }
@@ -101,6 +125,7 @@ void LogRecordWindow::connectSignals()
 {
     connect(ui->add_log_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onAddLogClicked);
     connect(ui->refresh_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onRefreshClicked);
+    connect(ui->export_csv_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onExportCsvClicked);
     connect(ui->search_log_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onSearchClicked);
     connect(ui->tableView, &QTableView::customContextMenuRequested, this, &LogRecordWindow::onTableContextMenuRequested);
 }
@@ -108,15 +133,19 @@ void LogRecordWindow::connectSignals()
 void LogRecordWindow::refreshData()
 {
     if (!m_model) return;
-    m_model->setFilter(QString("user_id=%1").arg(m_userId));
+    if (m_role != "admin") {
+        m_model->setFilter(QString("user_id=%1").arg(m_userId));
+    } else {
+        m_model->setFilter(QString());
+    }
     m_model->select();
     updateCountLabel();
 }
 
 void LogRecordWindow::updateCountLabel()
 {
-    if (!m_model) return;
-    ui->book_total_label->setText(QString("总计：%1").arg(m_model->rowCount()));
+    if (!m_proxy) return;
+    ui->book_total_label->setText(QString("总计：%1").arg(m_proxy->rowCount()));
 }
 
 void LogRecordWindow::onAddLogClicked()
@@ -167,6 +196,81 @@ void LogRecordWindow::onSearchClicked()
         // 直接用 pattern 存关键字，LogFilterProxyModel 会按 contains 来匹配
         m_proxy->setFilterRegularExpression(QRegularExpression(kw, QRegularExpression::CaseInsensitiveOption));
     }
+}
+
+void LogRecordWindow::onExportCsvClicked()
+{
+    if (!m_proxy) return;
+
+    const int rows = m_proxy->rowCount();
+    if (rows <= 0) {
+        QMessageBox::information(this, "导出CSV", "当前没有可导出的记录。");
+        return;
+    }
+
+    const QString defaultName = QString("logs_%1.csv").arg(QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss"));
+    const QString defaultPath = QDir::home().absoluteFilePath(defaultName);
+
+    QString filePath = QFileDialog::getSaveFileName(this, "导出事件记录为 CSV", defaultPath, "CSV 文件 (*.csv)");
+    if (filePath.isEmpty()) return;
+    if (!filePath.endsWith(".csv", Qt::CaseInsensitive)) filePath += ".csv";
+
+    QFile f(filePath);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        QMessageBox::warning(this, "导出失败", QString("无法写入文件：\n%1").arg(filePath));
+        return;
+    }
+
+    QTextStream out(&f);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    out.setEncoding(QStringConverter::Utf8);
+#endif
+    // 写 BOM，确保 Excel 打开中文不乱码
+    out << QChar(0xFEFF);
+
+    // 只导出当前 tableView 可见的列
+    QVector<int> cols;
+    cols.reserve(m_proxy->columnCount());
+    for (int c = 0; c < m_proxy->columnCount(); ++c) {
+        if (!ui->tableView->isColumnHidden(c)) cols.push_back(c);
+    }
+    if (cols.isEmpty()) {
+        QMessageBox::warning(this, "导出失败", "没有可导出的列。");
+        return;
+    }
+
+    auto csvEscape = [](QString s) -> QString {
+        s.replace("\"", "\"\"");
+        if (s.contains(',') || s.contains('"') || s.contains('\n') || s.contains('\r')) {
+            s = "\"" + s + "\"";
+        }
+        return s;
+    };
+
+    // 表头
+    {
+        QStringList header;
+        header.reserve(cols.size());
+        for (int c : cols) {
+            header << csvEscape(m_proxy->headerData(c, Qt::Horizontal).toString());
+        }
+        out << header.join(",") << "\n";
+    }
+
+    // 数据行
+    for (int r = 0; r < rows; ++r) {
+        QStringList line;
+        line.reserve(cols.size());
+        for (int c : cols) {
+            const QString v = m_proxy->data(m_proxy->index(r, c), Qt::DisplayRole).toString();
+            line << csvEscape(v);
+        }
+        out << line.join(",") << "\n";
+    }
+
+    f.close();
+    QMessageBox::information(this, "导出完成",
+                             QString("已导出 %1 条记录到：\n%2").arg(rows).arg(filePath));
 }
 
 void LogRecordWindow::onTableContextMenuRequested(const QPoint& pos)
