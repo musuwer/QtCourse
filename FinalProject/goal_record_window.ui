@@ -1,7 +1,59 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
  <class>GoalRecordWindow</class>
  <widget class="QWidget" name="GoalRecordWindow">
+  <property name="styleSheet">
+   <string notr="true">QWidget#GoalRecordWindow {
+  background: #F5F7FA;
+}
+QLabel {
+  color: #111827;
+}
+QLineEdit, QTextEdit {
+  background: #FFFFFF;
+  border: 1px solid #D0D7DE;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+QLineEdit:focus, QTextEdit:focus {
+  border: 1px solid #3B82F6;
+}
+QTextEdit {
+  padding: 8px 10px;
+}
+QPushButton {
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+QPushButton:hover {
+  background: #2563EB;
+}
+QPushButton:pressed {
+  background: #1D4ED8;
+}
+QPushButton:disabled {
+  background: #9CA3AF;
+}
+QPushButton#pushButton {
+  background: #E5E7EB;
+  color: #111827;
+}
+QPushButton#pushButton:hover {
+  background: #D1D5DB;
+}
+QPushButton#pushButton:pressed {
+  background: #C7CDD6;
+}</string>
+  </property>
+  <property name="font">
+   <font>
+    <family>Microsoft YaHei UI</family>
+    <pointsize>11</pointsize>
+   </font>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,83 +63,345 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true" />
+   <string>添加目标</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <property name="bottomMargin">
+    <number>18</number>
+   </property>
+   <property name="rightMargin">
+    <number>18</number>
+   </property>
+   <property name="topMargin">
+    <number>18</number>
+   </property>
+   <property name="leftMargin">
+    <number>18</number>
+   </property>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="label">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei UI</family>
+             <pointsize>11</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignVCenter</set>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>72</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>名称</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit" />
+          <widget class="QLineEdit" name="lineEdit">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>请输入名称</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="label_2">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei UI</family>
+             <pointsize>11</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignVCenter</set>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>72</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>计划</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_2" />
+          <widget class="QLineEdit" name="lineEdit_2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>请输入计划</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="label_3">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei UI</family>
+             <pointsize>11</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignVCenter</set>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>72</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>进度</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_3" />
+          <widget class="QLineEdit" name="lineEdit_3">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>请输入进度（如 50%）</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="label_4">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei UI</family>
+             <pointsize>11</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignVCenter</set>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>72</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>开始</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_4" />
+          <widget class="QLineEdit" name="lineEdit_4">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>开始日期（YYYY-MM-DD）</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="label_5">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei UI</family>
+             <pointsize>11</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignVCenter</set>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>72</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>截止</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_5" />
+          <widget class="QLineEdit" name="lineEdit_5">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>截止日期（YYYY-MM-DD）</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -95,8 +409,29 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QPushButton" name="pushButton">
+         <property name="minimumSize">
+          <size>
+           <width>96</width>
+           <height>34</height>
+          </size>
+         </property>
          <property name="text">
           <string>取消</string>
          </property>
@@ -117,6 +452,12 @@
        </item>
        <item>
         <widget class="QPushButton" name="pushButton_2">
+         <property name="minimumSize">
+          <size>
+           <width>96</width>
+           <height>34</height>
+          </size>
+         </property>
          <property name="text">
           <string>添加</string>
          </property>
@@ -128,6 +469,6 @@
    </item>
   </layout>
  </widget>
- <resources />
- <connections />
+ <resources/>
+ <connections/>
 </ui>

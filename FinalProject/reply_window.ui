@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
- <class>AnnouceWindow</class>
- <widget class="QWidget" name="AnnouceWindow">
+ <class>ReplyWindow</class>
+ <widget class="QWidget" name="ReplyWindow">
   <property name="styleSheet">
-   <string notr="true">QWidget#AnnouceWindow {
+   <string notr="true">QWidget#ReplyWindow {
   background: #F5F7FA;
 }
 QLabel {
@@ -63,7 +63,7 @@ QPushButton#cancel_pushButton:pressed {
    </rect>
   </property>
   <property name="windowTitle">
-   <string>发布公告</string>
+   <string>回复用户</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="spacing">
@@ -120,43 +120,15 @@ QPushButton#cancel_pushButton:pressed {
          <property name="font">
           <font>
            <family>Microsoft YaHei UI</family>
-           <pointsize>11</pointsize>
+           <pointsize>16</pointsize>
            <bold>true</bold>
           </font>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignVCenter</set>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>72</width>
-           <height>0</height>
-          </size>
-         </property>
          <property name="text">
-          <string>公告标题</string>
+          <string>回复用户</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="annouce_title_lineEdit">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="placeholderText">
-          <string>请输入公告标题</string>
-         </property>
-         <property name="font">
-          <font>
-           <family>宋体</family>
-           <pointsize>11</pointsize>
-          </font>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -188,7 +160,7 @@ QPushButton#cancel_pushButton:pressed {
           </size>
          </property>
          <property name="placeholderText">
-          <string>请输入公告内容…</string>
+          <string>请输入回复内容…</string>
          </property>
          <property name="font">
           <font>

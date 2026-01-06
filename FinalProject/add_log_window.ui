@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>AddLogWindow</class>
  <widget class="QWidget" name="AddLogWindow">
@@ -10,12 +10,84 @@
     <height>312</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Microsoft YaHei UI</family>
+    <pointsize>11</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>添加记录</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#AddLogWindow {
+  background: #F5F7FA;
+}
+QLabel {
+  color: #111827;
+}
+QLineEdit, QTextEdit {
+  background: #FFFFFF;
+  border: 1px solid #D0D7DE;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+QLineEdit:focus, QTextEdit:focus {
+  border: 1px solid #3B82F6;
+}
+QTextEdit {
+  padding: 8px 10px;
+}
+QPushButton {
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+QPushButton:hover {
+  background: #2563EB;
+}
+QPushButton:pressed {
+  background: #1D4ED8;
+}
+QPushButton:disabled {
+  background: #9CA3AF;
+}</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>18</number>
+   </property>
+   <property name="topMargin">
+    <number>18</number>
+   </property>
+   <property name="rightMargin">
+    <number>18</number>
+   </property>
+   <property name="bottomMargin">
+    <number>18</number>
+   </property>
+   <property name="spacing">
+    <number>12</number>
+   </property>
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="label">
        <property name="minimumSize">
@@ -24,18 +96,34 @@
          <height>0</height>
         </size>
        </property>
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>11</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>名称</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="book_name_lineEdit">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="placeholderText">
+        <string>请输入名称</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -43,6 +131,21 @@
    </item>
    <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="label_2">
        <property name="minimumSize">
@@ -51,18 +154,34 @@
          <height>0</height>
         </size>
        </property>
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>11</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>类型</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="author_lineEdit">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="placeholderText">
+        <string>请输入类型</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -70,6 +189,21 @@
    </item>
    <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="label_3">
        <property name="minimumSize">
@@ -78,18 +212,34 @@
          <height>0</height>
         </size>
        </property>
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>11</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>地点</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="publish_company_lineEdit">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="placeholderText">
+        <string>请输入地点</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -97,20 +247,57 @@
    </item>
    <item row="3" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="label_4">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="minimumSize">
+        <size>
+         <width>72</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>11</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>时间     </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="publish_date_lineEdit">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="placeholderText">
+        <string>例如 2026-01-06 20:00</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -118,20 +305,57 @@
    </item>
    <item row="4" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="label_5">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="minimumSize">
+        <size>
+         <width>72</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>11</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>内容     </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="store_num_lineEdit">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="placeholderText">
+        <string>请输入内容</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -139,10 +363,25 @@
    </item>
    <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -154,8 +393,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="add_book_pushButton">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt "宋体";</string>
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>34</height>
+        </size>
        </property>
        <property name="text">
         <string>添加</string>
@@ -166,6 +408,6 @@
    </item>
   </layout>
  </widget>
- <resources />
- <connections />
+ <resources/>
+ <connections/>
 </ui>
