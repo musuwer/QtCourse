@@ -13,6 +13,7 @@ SOURCES += \
     achievementwindow.cpp \
     addlogwindow.cpp \
     annoucewindow.cpp \
+    chatexchangewindow.cpp \
     dbmanager.cpp \
     goalrecordwindow.cpp \
     homewindow.cpp \
@@ -31,6 +32,9 @@ HEADERS += \
     achievementwindow.h \
     addlogwindow.h \
     annoucewindow.h \
+    chatclient.h \
+    chatexchangewindow.h \
+    chatserver.h \
     dbmanager.h \
     goalrecordwindow.h \
     homewindow.h \
@@ -48,6 +52,7 @@ FORMS += \
     achievement_window.ui \
     add_log_window.ui \
     annouce_window.ui \
+    chat_exchange_window.ui \
     goal_record_window.ui \
     home_window.ui \
     login_window.ui \
