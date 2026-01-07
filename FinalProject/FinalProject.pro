@@ -43,11 +43,14 @@ FORMS += \
     add_log_window.ui \
     annouce_window.ui \
     goal_record_window.ui \
+    home_window.ui \
     login_window.ui \
+    logrecord_window.ui \
     main_window.ui \
     mainwindow.ui \
     mood_calendar_window.ui \
-    register_window.ui
+    register_window.ui \
+    reply_window.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
