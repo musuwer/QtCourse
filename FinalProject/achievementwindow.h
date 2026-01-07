@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QString>
 
+class QPushButton;
+
 namespace Ui {
 class AchievementWindow;
 }
@@ -29,6 +31,7 @@ private slots:
     void onAddClicked();
     void onRefreshClicked();
     void onSearchClicked();
+    void onExportCsvClicked();
     void onTableContextMenu(const QPoint& pos);
 
 private:
@@ -36,6 +39,8 @@ private:
     int m_userId = -1;
     QString m_username;
     QString m_role;
+
+    QPushButton* m_exportCsvBtn = nullptr;
 };
 
 #endif // ACHIEVEMENTWINDOW_H

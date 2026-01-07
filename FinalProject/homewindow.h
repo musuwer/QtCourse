@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QString>
 
+class QPushButton;
+
 namespace Ui {
 class HomeWindow;
 }
@@ -34,6 +36,8 @@ private slots:
     void onRefreshGoalClicked();
     void onRefreshAnnClicked();
 
+    void onExportGoalCsvClicked();
+
     void onGoalContextMenu(const QPoint& pos);
     void onAnnContextMenu(const QPoint& pos);
 
@@ -43,6 +47,8 @@ private:
     int m_userId = -1;
     QString m_username;
     QString m_role;
+
+    QPushButton* m_exportGoalCsvBtn = nullptr;
 };
 
 #endif // HOMEWINDOW_H

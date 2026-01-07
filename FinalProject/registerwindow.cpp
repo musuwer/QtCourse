@@ -3,15 +3,9 @@
 
 #include <QMessageBox>
 #include <QPushButton>
-#include <QMouseEvent>
 #include <QEvent>
+#include <QMouseEvent>
 #include "dbmanager.h"
-
-#ifdef Q_OS_WIN
-#  include <windows.h>
-#  include <windowsx.h>
-#  pragma comment(lib, "User32.lib")   // ✅ 关键：链接 GetWindowRect 所在库
-#endif
 
 RegisterWindow::RegisterWindow(QWidget *parent)
     : QWidget(parent)
@@ -19,8 +13,7 @@ RegisterWindow::RegisterWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setupFrameless();
-    bindWindowButtons();
+    initFrameless();
 
     ui->lineEditPass->setEchoMode(QLineEdit::Password);
     ui->lineEditConfirm->setEchoMode(QLineEdit::Password);
@@ -29,101 +22,61 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     connect(ui->return_pushButton, &QPushButton::clicked, this, &RegisterWindow::handleReturn);
 }
 
-void RegisterWindow::setupFrameless()
+void RegisterWindow::initFrameless()
 {
-    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground, true);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
 
-    if (!ui->frame_4) return;
-    ui->frame_4->installEventFilter(this);
-    const auto children = ui->frame_4->findChildren<QWidget*>();
-    for (auto *w : children) {
-        if (!w) continue;
-        if (w == ui->min_button || w == ui->max_button || w == ui->close_button) continue;
-        w->installEventFilter(this);
+    if (ui->frame_4) {
+        ui->frame_4->installEventFilter(this);
     }
-}
-
-void RegisterWindow::bindWindowButtons()
-{
     if (ui->min_button) {
-        disconnect(ui->min_button, nullptr, this, nullptr);
         connect(ui->min_button, &QPushButton::clicked, this, &QWidget::showMinimized);
     }
     if (ui->max_button) {
-        disconnect(ui->max_button, nullptr, this, nullptr);
-        connect(ui->max_button, &QPushButton::clicked, this, [this] {
+        connect(ui->max_button, &QPushButton::clicked, this, [this]() {
             isMaximized() ? showNormal() : showMaximized();
         });
     }
     if (ui->close_button) {
-        disconnect(ui->close_button, nullptr, this, nullptr);
         connect(ui->close_button, &QPushButton::clicked, this, &QWidget::close);
     }
 }
 
-bool RegisterWindow::eventFilter(QObject *obj, QEvent *event)
+bool RegisterWindow::eventFilter(QObject* obj, QEvent* event)
 {
-    if (event->type() == QEvent::MouseButtonPress) {
-        auto *e = static_cast<QMouseEvent*>(event);
-        if (e->button() == Qt::LeftButton) {
-            m_dragging = true;
-            m_dragPos = e->globalPosition().toPoint() - frameGeometry().topLeft();
+    if (obj == ui->frame_4) {
+        switch (event->type()) {
+        case QEvent::MouseButtonPress: {
+            auto* e = static_cast<QMouseEvent*>(event);
+            if (e->button() == Qt::LeftButton) {
+                m_dragging = true;
+                m_dragOffset = e->globalPosition().toPoint() - frameGeometry().topLeft();
+                return true;
+            }
+            break;
+        }
+        case QEvent::MouseMove: {
+            if (m_dragging && !isMaximized()) {
+                auto* e = static_cast<QMouseEvent*>(event);
+                move(e->globalPosition().toPoint() - m_dragOffset);
+                return true;
+            }
+            break;
+        }
+        case QEvent::MouseButtonRelease: {
+            m_dragging = false;
+            break;
+        }
+        case QEvent::MouseButtonDblClick: {
+            isMaximized() ? showNormal() : showMaximized();
             return true;
         }
-    } else if (event->type() == QEvent::MouseMove) {
-        if (m_dragging && !isMaximized()) {
-            auto *e = static_cast<QMouseEvent*>(event);
-            move(e->globalPosition().toPoint() - m_dragPos);
-            return true;
+        default:
+            break;
         }
-    } else if (event->type() == QEvent::MouseButtonRelease) {
-        m_dragging = false;
-        return true;
-    } else if (event->type() == QEvent::MouseButtonDblClick) {
-        isMaximized() ? showNormal() : showMaximized();
-        return true;
     }
-
     return QWidget::eventFilter(obj, event);
 }
-
-#ifdef Q_OS_WIN
-bool RegisterWindow::nativeEvent(const QByteArray &eventType, void *message, qintptr *result)
-{
-    if (isMaximized()) {
-        return QWidget::nativeEvent(eventType, message, result);
-    }
-
-    if (eventType == "windows_generic_MSG" || eventType == "windows_dispatcher_MSG") {
-        MSG *msg = static_cast<MSG*>(message);
-        if (msg->message == WM_NCHITTEST) {
-            const int border = 8;
-            RECT winrect;
-            GetWindowRect(reinterpret_cast<HWND>(winId()), &winrect);
-
-            const long x = GET_X_LPARAM(msg->lParam);
-            const long y = GET_Y_LPARAM(msg->lParam);
-
-            const bool left   = x >= winrect.left && x < winrect.left + border;
-            const bool right  = x <= winrect.right && x > winrect.right - border;
-            const bool top    = y >= winrect.top && y < winrect.top + border;
-            const bool bottom = y <= winrect.bottom && y > winrect.bottom - border;
-
-            if (top && left)    { *result = HTTOPLEFT; return true; }
-            if (top && right)   { *result = HTTOPRIGHT; return true; }
-            if (bottom && left) { *result = HTBOTTOMLEFT; return true; }
-            if (bottom && right){ *result = HTBOTTOMRIGHT; return true; }
-            if (left)           { *result = HTLEFT; return true; }
-            if (right)          { *result = HTRIGHT; return true; }
-            if (top)            { *result = HTTOP; return true; }
-            if (bottom)         { *result = HTBOTTOM; return true; }
-        }
-    }
-
-    return QWidget::nativeEvent(eventType, message, result);
-}
-#endif
 
 RegisterWindow::~RegisterWindow()
 {
@@ -151,13 +104,17 @@ void RegisterWindow::handleRegister()
         return;
     }
 
-    if (!DbManager::instance().init()) {
-        QMessageBox::critical(this, "注册", "数据库初始化失败。");
+    QString dbErr;
+    if (!DbManager::instance().init(&dbErr)) {
+        QMessageBox::critical(this, "注册", QString("数据库初始化失败：\n%1\n\n数据库路径：\n%2")
+                                          .arg(dbErr, DbManager::instance().databasePath()));
         return;
     }
 
-    if (!DbManager::instance().registerUser(user, pass)) {
-        QMessageBox::warning(this, "注册", "注册失败：用户名可能已存在。");
+    QString err;
+    // 这里默认注册普通用户即可（DbManager 内部也会强制 role 为 user）
+    if (!DbManager::instance().registerUser(user, pass, &err)) {
+        QMessageBox::warning(this, "注册", QString("注册失败：%1").arg(err));
         return;
     }
 

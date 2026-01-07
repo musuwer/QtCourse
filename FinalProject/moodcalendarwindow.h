@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QString>
 
+class QPushButton;
+
 namespace Ui {
 class MoodCalendarWindow;
 }
@@ -26,13 +28,15 @@ private:
 
 private slots:
     void onCalendarChanged();
+    void onExportCsvClicked();
 
 private:
     Ui::MoodCalendarWindow *ui;
     int m_userId = -1;
     QString m_username;
     QString m_role;
-    bool m_isAdmin = false;
+
+    QPushButton* m_exportCsvBtn = nullptr;
 };
 
 #endif // MOODCALENDARWINDOW_H

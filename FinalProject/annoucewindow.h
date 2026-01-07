@@ -7,28 +7,35 @@ namespace Ui {
 class AnnouceWindow;
 }
 
+/**
+ * AnnouceWindow：发布公告弹窗
+ * UI控件名（来自 annouce_window.ui）：
+ * - annouce_title_lineEdit
+ * - textEdit
+ * - cancel_pushButton
+ * - send_pushButton
+ */
 class AnnouceWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    // 优化：增加 author 参数，默认值为 "Admin"
-    explicit AnnouceWindow(const QString& author = "Admin", QWidget *parent = nullptr);
+    explicit AnnouceWindow(QWidget *parent = nullptr);
     ~AnnouceWindow();
 
     QString getTitle() const;
     QString getContent() const;
+
+private:
+    void initUi();
+    void connectSignals();
 
 private slots:
     void onSendClicked();
     void onCancelClicked();
 
 private:
-    void initUi();
-    void connectSignals();
-
     Ui::AnnouceWindow *ui;
-    QString m_author; // 储存发布者名字
 };
 
 #endif // ANNOUCEWINDOW_H

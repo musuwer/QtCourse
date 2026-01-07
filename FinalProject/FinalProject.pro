@@ -20,8 +20,11 @@ SOURCES += \
     logrecordwindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    messageadminwindow.cpp \
+    messageuserwindow.cpp \
     moodcalendarwindow.cpp \
-    registerwindow.cpp
+    registerwindow.cpp \
+    replywindow.cpp
 
 HEADERS += \
     aboutwindow.h \
@@ -34,8 +37,11 @@ HEADERS += \
     loginwindow.h \
     logrecordwindow.h \
     mainwindow.h \
+    messageadminwindow.h \
+    messageuserwindow.h \
     moodcalendarwindow.h \
-    registerwindow.h
+    registerwindow.h \
+    replywindow.h
 
 FORMS += \
     about_window.ui \
@@ -48,6 +54,8 @@ FORMS += \
     logrecord_window.ui \
     main_window.ui \
     mainwindow.ui \
+    message_info_user_window.ui \
+    message_info_window.ui \
     mood_calendar_window.ui \
     register_window.ui \
     reply_window.ui

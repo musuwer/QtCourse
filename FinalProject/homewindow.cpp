@@ -6,6 +6,15 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QDate>
+#include <QHeaderView>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
+#include <QStringConverter>
+#include <QDir>
+#include <QVector>
 
 #include "dbmanager.h"
 #include "goalrecordwindow.h"
@@ -50,12 +59,16 @@ void HomeWindow::setupTableWidgets()
     ui->goal_tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->goal_tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->goal_tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->goal_tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->goal_tableWidget->horizontalHeader()->setStretchLastSection(true);
 
     // announcements
     ui->annou_info_tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->annou_info_tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->annou_info_tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->annou_info_tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->annou_info_tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->annou_info_tableWidget->horizontalHeader()->setStretchLastSection(true);
 }
 
 void HomeWindow::connectSignals()
@@ -68,6 +81,11 @@ void HomeWindow::connectSignals()
 
     connect(ui->goal_tableWidget, &QTableWidget::customContextMenuRequested, this, &HomeWindow::onGoalContextMenu);
     connect(ui->annou_info_tableWidget, &QTableWidget::customContextMenuRequested, this, &HomeWindow::onAnnContextMenu);
+
+    // ✅ 导出按钮由 .ui 提供
+    if (ui->export_goal_csv_pushButton) {
+        connect(ui->export_goal_csv_pushButton, &QPushButton::clicked, this, &HomeWindow::onExportGoalCsvClicked);
+    }
 }
 
 void HomeWindow::refreshAll()
@@ -81,8 +99,12 @@ void HomeWindow::refreshGoals()
     ui->goal_tableWidget->setRowCount(0);
 
     QSqlQuery q(DbManager::instance().database());
-    q.prepare("SELECT id,user_id,goal,plan,progress,start_time,end_time FROM goals WHERE user_id=? ORDER BY id DESC");
-    q.addBindValue(m_userId);
+    if (m_role == "admin") {
+        q.prepare("SELECT id,user_id,goal,plan,progress,start_time,end_time FROM goals ORDER BY id DESC");
+    } else {
+        q.prepare("SELECT id,user_id,goal,plan,progress,start_time,end_time FROM goals WHERE user_id=? ORDER BY id DESC");
+        q.addBindValue(m_userId);
+    }
 
     if (!q.exec()) {
         QMessageBox::warning(this, "查询失败", q.lastError().text());
@@ -171,7 +193,7 @@ void HomeWindow::onAddAnnouncementClicked()
     if (dlg.exec() != QDialog::Accepted) return;
 
     QString err;
-    if (!DbManager::instance().addAnnouncement(dlg.getTitle(), dlg.getContent(), m_username, &err)) {
+    if (!DbManager::instance().addAnnouncement(m_username, dlg.getTitle(), dlg.getContent(), &err)) {
         QMessageBox::warning(this, "发布失败", err);
         return;
     }
@@ -186,6 +208,79 @@ void HomeWindow::onRefreshGoalClicked()
 void HomeWindow::onRefreshAnnClicked()
 {
     refreshAnnouncements();
+}
+
+void HomeWindow::onExportGoalCsvClicked()
+{
+    if (!ui->goal_tableWidget) return;
+    if (ui->goal_tableWidget->rowCount() <= 0) {
+        QMessageBox::information(this, "导出", "没有可导出的数据。");
+        return;
+    }
+
+    const QString defaultName = QString("goals_%1.csv").arg(QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss"));
+    const QString defaultPath = QDir::home().filePath(defaultName);
+    QString filePath = QFileDialog::getSaveFileName(this, "导出目标记录为 CSV", defaultPath, "CSV 文件 (*.csv)");
+    if (filePath.isEmpty()) return;
+    if (!filePath.endsWith(".csv", Qt::CaseInsensitive)) filePath += ".csv";
+
+    // 导出可见列
+    QVector<int> cols;
+    cols.reserve(ui->goal_tableWidget->columnCount());
+    for (int c = 0; c < ui->goal_tableWidget->columnCount(); ++c) {
+        if (!ui->goal_tableWidget->isColumnHidden(c)) cols.push_back(c);
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+        QMessageBox::warning(this, "导出失败", "无法写入文件：" + file.errorString());
+        return;
+    }
+
+    QTextStream out(&file);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    out.setEncoding(QStringConverter::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
+    out << QChar(0xFEFF);
+
+    auto csvEscape = [](QString s) -> QString {
+        s.replace("\"", "\"\"");
+        if (s.contains(',') || s.contains('"') || s.contains('\n') || s.contains('\r')) {
+            s = "\"" + s + "\"";
+        }
+        return s;
+    };
+
+    // 表头
+    {
+        QStringList header;
+        header.reserve(cols.size());
+        for (int c : cols) {
+            auto* hi = ui->goal_tableWidget->horizontalHeaderItem(c);
+            header << csvEscape(hi ? hi->text() : QString("col_%1").arg(c));
+        }
+        out << header.join(",") << "\n";
+    }
+
+    // 数据（跳过隐藏行）
+    int exported = 0;
+    for (int r = 0; r < ui->goal_tableWidget->rowCount(); ++r) {
+        if (ui->goal_tableWidget->isRowHidden(r)) continue;
+        QStringList row;
+        row.reserve(cols.size());
+        for (int c : cols) {
+            const QTableWidgetItem* it = ui->goal_tableWidget->item(r, c);
+            row << csvEscape(it ? it->text() : QString());
+        }
+        out << row.join(",") << "\n";
+        exported++;
+    }
+
+    file.close();
+    QMessageBox::information(this, "导出完成",
+                             QString("已导出 %1 条目标记录到：\n%2").arg(exported).arg(QDir::toNativeSeparators(filePath)));
 }
 
 void HomeWindow::onGoalContextMenu(const QPoint& pos)

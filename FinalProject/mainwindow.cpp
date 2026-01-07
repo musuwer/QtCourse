@@ -2,8 +2,9 @@
 #include "ui_main_window.h"
 
 #include <QMessageBox>
-#include <QMouseEvent>
 #include <QEvent>
+#include <QMouseEvent>
+#include <QAbstractButton>
 
 #include "dbmanager.h"
 #include "homewindow.h"
@@ -13,13 +14,6 @@
 #include "messageuserwindow.h"
 #include "messageadminwindow.h"
 #include "aboutwindow.h"
-#include "loginwindow.h"
-
-#ifdef Q_OS_WIN
-#  include <windows.h>
-#  include <windowsx.h>
-#  pragma comment(lib, "User32.lib")   // ✅ 关键：链接 GetWindowRect 所在库
-#endif
 
 MainWindow::MainWindow(const QString& username, QWidget *parent)
     : QMainWindow(parent)
@@ -28,8 +22,7 @@ MainWindow::MainWindow(const QString& username, QWidget *parent)
 {
     ui->setupUi(this);
 
-    setupFrameless();
-    bindWindowButtons();
+    initFrameless();
 
     m_userId = DbManager::instance().getUserId(m_username);
     m_role = DbManager::instance().getUserRole(m_username);
@@ -39,6 +32,61 @@ MainWindow::MainWindow(const QString& username, QWidget *parent)
     connectSignals();
 }
 
+void MainWindow::initFrameless()
+{
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
+
+    if (ui->frame_4) {
+        ui->frame_4->installEventFilter(this);
+
+        // ✅ 关键：标题栏的非按钮子控件也装 eventFilter，让“点到文字/空白”也能拖
+        const auto widgets = ui->frame_4->findChildren<QWidget*>();
+        for (QWidget* w : widgets) {
+            if (!w) continue;
+            if (qobject_cast<QAbstractButton*>(w)) continue; // 不拦截按钮点击
+            w->installEventFilter(this);
+        }
+    }
+}
+
+bool MainWindow::eventFilter(QObject* obj, QEvent* event)
+{
+    QWidget* w = qobject_cast<QWidget*>(obj);
+    const bool inTitleBar = ui->frame_4 && w && (w == ui->frame_4 || ui->frame_4->isAncestorOf(w));
+    if (inTitleBar) {
+        switch (event->type()) {
+        case QEvent::MouseButtonPress: {
+            auto* e = static_cast<QMouseEvent*>(event);
+            if (e->button() == Qt::LeftButton) {
+                m_dragging = true;
+                m_dragOffset = e->globalPosition().toPoint() - frameGeometry().topLeft();
+                return true;
+            }
+            break;
+        }
+        case QEvent::MouseMove: {
+            if (m_dragging && !isMaximized()) {
+                auto* e = static_cast<QMouseEvent*>(event);
+                move(e->globalPosition().toPoint() - m_dragOffset);
+                return true;
+            }
+            break;
+        }
+        case QEvent::MouseButtonRelease: {
+            m_dragging = false;
+            break;
+        }
+        case QEvent::MouseButtonDblClick: {
+            isMaximized() ? showNormal() : showMaximized();
+            return true;
+        }
+        default:
+            break;
+        }
+    }
+    return QMainWindow::eventFilter(obj, event);
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -46,8 +94,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initUi()
 {
-    // 系统命名（基础版）
-    setWindowTitle("CampusMate · 学途管家");
+    setWindowTitle("Trip Memory · 旅忆");
 
     ui->current_username_label->setText(m_username);
     ui->current_role_label->setText(m_role.isEmpty() ? "user" : m_role);
@@ -91,101 +138,11 @@ void MainWindow::connectSignals()
 {
     connect(ui->listWidget, &QListWidget::currentRowChanged, this, &MainWindow::onNavChanged);
     connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::onLogoutClicked);
+
+    connect(ui->min_button, &QPushButton::clicked, this, &MainWindow::onMinClicked);
+    connect(ui->max_button, &QPushButton::clicked, this, &MainWindow::onMaxClicked);
+    connect(ui->close_button, &QPushButton::clicked, this, &MainWindow::onCloseClicked);
 }
-
-void MainWindow::setupFrameless()
-{
-    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground, true);
-
-    if (!ui->frame_4) return;
-    ui->frame_4->installEventFilter(this);
-    const auto children = ui->frame_4->findChildren<QWidget*>();
-    for (auto *w : children) {
-        if (!w) continue;
-        if (w == ui->min_button || w == ui->max_button || w == ui->close_button) continue;
-        w->installEventFilter(this);
-    }
-}
-
-void MainWindow::bindWindowButtons()
-{
-    if (ui->min_button) {
-        disconnect(ui->min_button, nullptr, this, nullptr);
-        connect(ui->min_button, &QPushButton::clicked, this, &MainWindow::onMinClicked);
-    }
-    if (ui->max_button) {
-        disconnect(ui->max_button, nullptr, this, nullptr);
-        connect(ui->max_button, &QPushButton::clicked, this, &MainWindow::onMaxClicked);
-    }
-    if (ui->close_button) {
-        disconnect(ui->close_button, nullptr, this, nullptr);
-        connect(ui->close_button, &QPushButton::clicked, this, &MainWindow::onCloseClicked);
-    }
-}
-
-bool MainWindow::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::MouseButtonPress) {
-        auto *e = static_cast<QMouseEvent*>(event);
-        if (e->button() == Qt::LeftButton) {
-            m_dragging = true;
-            m_dragPos = e->globalPosition().toPoint() - frameGeometry().topLeft();
-            return true;
-        }
-    } else if (event->type() == QEvent::MouseMove) {
-        if (m_dragging && !isMaximized()) {
-            auto *e = static_cast<QMouseEvent*>(event);
-            move(e->globalPosition().toPoint() - m_dragPos);
-            return true;
-        }
-    } else if (event->type() == QEvent::MouseButtonRelease) {
-        m_dragging = false;
-        return true;
-    } else if (event->type() == QEvent::MouseButtonDblClick) {
-        isMaximized() ? showNormal() : showMaximized();
-        return true;
-    }
-
-    return QMainWindow::eventFilter(obj, event);
-}
-
-#ifdef Q_OS_WIN
-bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, qintptr *result)
-{
-    if (isMaximized()) {
-        return QMainWindow::nativeEvent(eventType, message, result);
-    }
-
-    if (eventType == "windows_generic_MSG" || eventType == "windows_dispatcher_MSG") {
-        MSG *msg = static_cast<MSG*>(message);
-        if (msg->message == WM_NCHITTEST) {
-            const int border = 8;
-            RECT winrect;
-            GetWindowRect(reinterpret_cast<HWND>(winId()), &winrect);
-
-            const long x = GET_X_LPARAM(msg->lParam);
-            const long y = GET_Y_LPARAM(msg->lParam);
-
-            const bool left   = x >= winrect.left && x < winrect.left + border;
-            const bool right  = x <= winrect.right && x > winrect.right - border;
-            const bool top    = y >= winrect.top && y < winrect.top + border;
-            const bool bottom = y <= winrect.bottom && y > winrect.bottom - border;
-
-            if (top && left)    { *result = HTTOPLEFT; return true; }
-            if (top && right)   { *result = HTTOPRIGHT; return true; }
-            if (bottom && left) { *result = HTBOTTOMLEFT; return true; }
-            if (bottom && right){ *result = HTBOTTOMRIGHT; return true; }
-            if (left)           { *result = HTLEFT; return true; }
-            if (right)          { *result = HTRIGHT; return true; }
-            if (top)            { *result = HTTOP; return true; }
-            if (bottom)         { *result = HTBOTTOM; return true; }
-        }
-    }
-
-    return QMainWindow::nativeEvent(eventType, message, result);
-}
-#endif
 
 void MainWindow::onNavChanged(int row)
 {
@@ -198,10 +155,7 @@ void MainWindow::onLogoutClicked()
     const auto ret = QMessageBox::question(this, "退出登录", "确定要退出当前账号吗？");
     if (ret != QMessageBox::Yes) return;
 
-    // 切换用户：回到登录页面（不退出程序）
-    auto* lw = new LoginWindow();
-    lw->setAttribute(Qt::WA_DeleteOnClose);
-    lw->show();
+    emit logoutRequested();
     close();
 }
 

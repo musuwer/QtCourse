@@ -46,39 +46,53 @@ static bool tableHasColumn(QSqlDatabase& db, const QString& table, const QString
 
 QString DbManager::databasePath() const
 {
-    // ✅ 可移植：优先在“当前运行目录 / exe目录及其父目录”中查找 database.db
-    // 这样即使可执行文件在 build/.../debug 下，仍能自动找到项目根目录里的 database.db
     const QString dbName = "database.db";
-    const QString proName = "Test_First_finalproject.pro";
 
+    // ✅ 优先：找到 .pro 所在目录（项目根目录），直接用它同级的 database.db
+    // 注意：先从 currentPath 找，再从 exeDir 找，避免 Qt Creator 工作目录就是项目目录时走偏
     const QStringList startDirs = {
-        QCoreApplication::applicationDirPath(),
-        QDir::currentPath()
+        QDir::currentPath(),
+        QCoreApplication::applicationDirPath()
     };
 
+    auto findProDir = [&](const QString& start) -> QString {
+        QDir d(start);
+        for (int depth = 0; depth < 12; ++depth) {
+            const QStringList pros = d.entryList(QStringList() << "*.pro", QDir::Files);
+            if (!pros.isEmpty()) {
+                return d.absolutePath(); // 这个目录就是 .pro 所在目录
+            }
+            if (!d.cdUp()) break;
+        }
+        return QString();
+    };
+
+    // 1) 只要找到 .pro 目录，就优先使用它同级的 database.db（不存在也用这个路径创建）
+    for (const QString& start : startDirs) {
+        const QString proDirPath = findProDir(start);
+        if (!proDirPath.isEmpty()) {
+            QDir proDir(proDirPath);
+            return QDir::cleanPath(proDir.absoluteFilePath(dbName));
+        }
+    }
+
+    // 2) 找不到 .pro：再退化为“向上查找是否存在 database.db”
     for (const QString& start : startDirs) {
         QDir d(start);
-        for (int depth = 0; depth < 8; ++depth) {  // 最多向上找 7 层
-            const QString candidate = d.absoluteFilePath(dbName);
-            if (QFileInfo::exists(candidate)) {
-                return QDir::cleanPath(candidate);
+        for (int depth = 0; depth < 12; ++depth) {
+            const QString candidateDb = d.absoluteFilePath(dbName);
+            if (QFileInfo::exists(candidateDb)) {
+                return QDir::cleanPath(candidateDb);
             }
-
-            // 如果找到了项目根目录（含 .pro），则把数据库固定放在这里（即使当前 db 还不存在）
-            const QString proPath = d.absoluteFilePath(proName);
-            if (QFileInfo::exists(proPath)) {
-                return QDir::cleanPath(candidate); // = <项目根目录>/database.db
-            }
-
             if (!d.cdUp()) break;
         }
     }
 
-    // 仍没找到：就放在 exe 同目录（最便于打包/拷贝）
+    // 3) 仍找不到：放在 exe 同目录
     QDir exeDir(QCoreApplication::applicationDirPath());
-    const QString fallback = exeDir.absoluteFilePath(dbName);
-    return QDir::cleanPath(fallback);
+    return QDir::cleanPath(exeDir.absoluteFilePath(dbName));
 }
+
 
 
 bool DbManager::init(QString* errOut)

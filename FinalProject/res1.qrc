@@ -1,0 +1,47 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>res1/images/achievement_type.png</file>
+        <file>res1/images/achievement_level.png</file>
+        <file>res1/icons/send.png</file>
+        <file>res1/icons/advise.png</file>
+        <file>res1/icons/map.jpg</file>
+        <file>res1/icons/flowers.png</file>
+        <file>res1/icons/mood_cal.png</file>
+        <file>res1/icons/line_chart.png</file>
+        <file>res1/icons/logpen.png</file>
+        <file>res1/icons/data_image.png</file>
+        <file>res1/icons/bar.png</file>
+        <file>res1/icons/Crown.png</file>
+        <file>res1/icons/Sector.png</file>
+        <file>res1/icons/option.png</file>
+        <file>res1/icons/research.png</file>
+        <file>res1/icons/clock.png</file>
+        <file>res1/icons/add2.png</file>
+        <file>res1/icons/refresh2.png</file>
+        <file>res1/icons/add.png</file>
+        <file>res1/icons/refresh.png</file>
+        <file>res1/icons/totall.png</file>
+        <file>res1/icons/announce.png</file>
+        <file>res1/icons/goal.png</file>
+        <file>res1/icons/home_window.png</file>
+        <file>res1/icons/sun.png</file>
+        <file>res1/icons/id.png</file>
+        <file>res1/icons/id.png</file>
+        <file>res1/icons/role.png</file>
+        <file>res1/icons/change.png</file>
+        <file>res1/icons/return.png</file>
+        <file>res1/icons/close.png</file>
+        <file>res1/icons/login.png</file>
+        <file>res1/icons/max.png</file>
+        <file>res1/icons/min.png</file>
+        <file>res1/icons/QQ.png</file>
+        <file>res1/icons/register.png</file>
+        <file>res1/icons/wechat.png</file>
+        <file>res1/icons/weibo.png</file>
+        <file>res1/icons/yitu.png</file>
+        <file>res1/icons/Exportfile.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>res1/icons/Exportfile.png</file>
+    </qresource>
+</RCC>

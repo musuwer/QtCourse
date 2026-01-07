@@ -2,11 +2,6 @@
 #define LOGINWINDOW_H
 
 #include <QWidget>
-#include <QPoint>
-
-#ifdef Q_OS_WIN
-#include <QByteArray>
-#endif
 
 namespace Ui {
 class LoginWindow;
@@ -23,11 +18,7 @@ public:
     ~LoginWindow();
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event) override;
-
-#ifdef Q_OS_WIN
-    bool nativeEvent(const QByteArray &eventType, void *message, qintptr *result) override;
-#endif
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 private slots:
     void handleLogin();
@@ -36,19 +27,16 @@ private slots:
     void otherLoginNotReady();
 
 private:
+    void initFrameless();
     void bindOtherLoginButtonsByText();
-
-    void setupFrameless();
-    void bindWindowButtons();
 
 private:
     Ui::LoginWindow *ui;
     RegisterWindow* m_register = nullptr;
     MainWindow* m_main = nullptr;
 
-    // frameless drag
     bool m_dragging = false;
-    QPoint m_dragPos;
+    QPoint m_dragOffset;
 };
 
 #endif // LOGINWINDOW_H

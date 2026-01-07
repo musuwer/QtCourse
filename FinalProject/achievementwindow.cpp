@@ -12,6 +12,14 @@
 #include <QDialogButtonBox>
 #include <QDate>
 #include <QHeaderView>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
+#include <QStringConverter>
+#include <QDir>
+#include <QVector>
 
 #include "dbmanager.h"
 
@@ -67,7 +75,84 @@ void AchievementWindow::connectSignals()
     connect(ui->add_achieve_pushButton, &QPushButton::clicked, this, &AchievementWindow::onAddClicked);
     connect(ui->refresh_pushButton, &QPushButton::clicked, this, &AchievementWindow::onRefreshClicked);
     connect(ui->search_pushButton, &QPushButton::clicked, this, &AchievementWindow::onSearchClicked);
+    // ✅ 导出按钮由 .ui 提供
+    if (ui->export_csv_pushButton) {
+        connect(ui->export_csv_pushButton, &QPushButton::clicked, this, &AchievementWindow::onExportCsvClicked);
+    }
     connect(ui->tableWidget, &QTableWidget::customContextMenuRequested, this, &AchievementWindow::onTableContextMenu);
+}
+
+void AchievementWindow::onExportCsvClicked()
+{
+    if (!ui->tableWidget) return;
+    if (ui->tableWidget->rowCount() <= 0) {
+        QMessageBox::information(this, "导出", "没有可导出的数据。");
+        return;
+    }
+
+    const QString defaultName = QString("achievements_%1.csv").arg(QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss"));
+    const QString defaultPath = QDir::home().filePath(defaultName);
+    QString filePath = QFileDialog::getSaveFileName(this, "导出成就记录为 CSV", defaultPath, "CSV 文件 (*.csv)");
+    if (filePath.isEmpty()) return;
+    if (!filePath.endsWith(".csv", Qt::CaseInsensitive)) filePath += ".csv";
+
+    // 导出可见列
+    QVector<int> cols;
+    cols.reserve(ui->tableWidget->columnCount());
+    for (int c = 0; c < ui->tableWidget->columnCount(); ++c) {
+        if (!ui->tableWidget->isColumnHidden(c)) cols.push_back(c);
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+        QMessageBox::warning(this, "导出失败", "无法写入文件：" + file.errorString());
+        return;
+    }
+
+    QTextStream out(&file);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    out.setEncoding(QStringConverter::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
+    out << QChar(0xFEFF);
+
+    auto csvEscape = [](QString s) -> QString {
+        s.replace("\"", "\"\"");
+        if (s.contains(',') || s.contains('"') || s.contains('\n') || s.contains('\r')) {
+            s = "\"" + s + "\"";
+        }
+        return s;
+    };
+
+    // 表头
+    {
+        QStringList header;
+        header.reserve(cols.size());
+        for (int c : cols) {
+            auto* hi = ui->tableWidget->horizontalHeaderItem(c);
+            header << csvEscape(hi ? hi->text() : QString("col_%1").arg(c));
+        }
+        out << header.join(",") << "\n";
+    }
+
+    // 数据（跳过隐藏行）
+    int exported = 0;
+    for (int r = 0; r < ui->tableWidget->rowCount(); ++r) {
+        if (ui->tableWidget->isRowHidden(r)) continue;
+        QStringList row;
+        row.reserve(cols.size());
+        for (int c : cols) {
+            const QTableWidgetItem* it = ui->tableWidget->item(r, c);
+            row << csvEscape(it ? it->text() : QString());
+        }
+        out << row.join(",") << "\n";
+        exported++;
+    }
+
+    file.close();
+    QMessageBox::information(this, "导出完成",
+                             QString("已导出 %1 条成就记录到：\n%2").arg(exported).arg(QDir::toNativeSeparators(filePath)));
 }
 
 void AchievementWindow::refreshData()

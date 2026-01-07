@@ -2,11 +2,6 @@
 #define REGISTERWINDOW_H
 
 #include <QWidget>
-#include <QPoint>
-
-#ifdef Q_OS_WIN
-#include <QByteArray>
-#endif
 
 namespace Ui {
 class RegisterWindow;
@@ -20,11 +15,7 @@ public:
     ~RegisterWindow();
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event) override;
-
-#ifdef Q_OS_WIN
-    bool nativeEvent(const QByteArray &eventType, void *message, qintptr *result) override;
-#endif
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 signals:
     void backToLoginRequested();
@@ -34,13 +25,12 @@ private slots:
     void handleReturn();
 
 private:
+    void initFrameless();
+
     Ui::RegisterWindow *ui;
 
-    void setupFrameless();
-    void bindWindowButtons();
-
     bool m_dragging = false;
-    QPoint m_dragPos;
+    QPoint m_dragOffset;
 };
 
 #endif // REGISTERWINDOW_H
