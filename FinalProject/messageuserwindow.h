@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QString>
 
+class QChartView; // QtCharts
+
 namespace Ui {
 class MessageUserWindow;
 }
@@ -23,6 +25,10 @@ private:
     void initUi();
     void connectSignals();
 
+    // 图表：每月意见数量
+    void initChartsIfNeeded();
+    void updateMonthChart();
+
 private slots:
     void onSendClicked();
     void onRefreshClicked();
@@ -30,6 +36,8 @@ private slots:
 private:
     Ui::MessageUserWindow *ui;
     QString m_username;
+
+    QChartView* m_monthChartView = nullptr;
 };
 
 #endif // MESSAGEUSERWINDOW_H

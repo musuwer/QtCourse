@@ -679,6 +679,18 @@ font: 15pt "Agency FB";</string>
            <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
              <widget class="QWidget" name="advise_widget" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>240</height>
+               </size>
+              </property>
               <property name="styleSheet">
                <string notr="true">background-color: rgb(0, 0, 0);
 border-radius:30px;</string>

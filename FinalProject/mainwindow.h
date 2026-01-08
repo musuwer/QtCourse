@@ -14,6 +14,7 @@ class LogRecordWindow;
 class MoodCalendarWindow;
 class MessageUserWindow;
 class MessageAdminWindow;
+class ChatExchangeWindow;
 class AboutWindow;
 
 class MainWindow : public QMainWindow
@@ -56,6 +57,7 @@ private:
     LogRecordWindow* m_log = nullptr;
     MoodCalendarWindow* m_mood = nullptr;
     QWidget* m_messagePage = nullptr; // user/admin 二选一
+    ChatExchangeWindow* m_chat = nullptr;
     AboutWindow* m_about = nullptr;
 
     bool m_dragging = false;

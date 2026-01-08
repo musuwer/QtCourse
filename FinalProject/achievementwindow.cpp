@@ -21,6 +21,21 @@
 #include <QDir>
 #include <QVector>
 
+// QtCharts（Qt6 下常用方式：直接使用 QChart/QChartView 等全局类名）
+#include <QtCharts/QChartView>
+#include <QtCharts/QChart>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QAbstractAxis>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+
+#include <QVBoxLayout>
+#include <QMap>
+#include <algorithm>
+
 #include "dbmanager.h"
 
 namespace {
@@ -52,6 +67,7 @@ AchievementWindow::AchievementWindow(int userId, const QString& username, const 
     ui->setupUi(this);
     initUi();
     connectSignals();
+    initChartsIfNeeded();
     refreshData();
 }
 
@@ -190,6 +206,9 @@ void AchievementWindow::refreshData()
 
         row++;
     }
+
+    // 让图表跟随数据刷新
+    updateChartsFromTable();
 }
 
 void AchievementWindow::doSearch()
@@ -238,6 +257,8 @@ void AchievementWindow::doSearch()
         ui->tableWidget->setItem(row, 6, new QTableWidgetItem(safeStr(q.value(7))));
         row++;
     }
+
+    updateChartsFromTable();
 }
 
 void AchievementWindow::onAddClicked()
@@ -331,4 +352,171 @@ void AchievementWindow::onTableContextMenu(const QPoint& pos)
         return;
     }
     refreshData();
+}
+
+void AchievementWindow::initChartsIfNeeded()
+{
+    if (m_typeChartView && m_levelPieView) return;
+    if (!ui) return;
+
+    QWidget* leftHost = ui->bar_widget;
+    QWidget* rightHost = ui->bar_widget_3;
+
+    // 兼容：若 .ui 未包含这些占位控件，则尝试按 objectName 查找
+    if (!leftHost) leftHost = findChild<QWidget*>(QStringLiteral("bar_widget"));
+    if (!rightHost) rightHost = findChild<QWidget*>(QStringLiteral("bar_widget_3"));
+    if (!leftHost || !rightHost) {
+        // UI 没有预留区域，直接不创建图表（避免崩溃）
+        return;
+    }
+
+    auto ensureLayout = [](QWidget* host) {
+        if (!host->layout()) {
+            auto* lay = new QVBoxLayout(host);
+            lay->setContentsMargins(0, 0, 0, 0);
+            lay->setSpacing(0);
+        }
+    };
+
+    ensureLayout(leftHost);
+    ensureLayout(rightHost);
+
+    // 左：柱状图（先创建空 Chart，后续 refreshData() 时填充数据）
+    {
+        auto* chart = new QChart();
+        chart->setTitle(QStringLiteral("成就类型分布"));
+        chart->setAnimationOptions(QChart::NoAnimation);
+
+        m_typeChartView = new QChartView(chart, leftHost);
+        m_typeChartView->setRenderHint(QPainter::Antialiasing, true);
+        m_typeChartView->setRubberBand(QChartView::NoRubberBand);
+        leftHost->layout()->addWidget(m_typeChartView);
+    }
+
+    // 右：扇形图
+    {
+        auto* chart = new QChart();
+        chart->setTitle(QStringLiteral("成就级别占比"));
+        chart->setAnimationOptions(QChart::NoAnimation);
+
+        m_levelPieView = new QChartView(chart, rightHost);
+        m_levelPieView->setRenderHint(QPainter::Antialiasing, true);
+        m_levelPieView->setRubberBand(QChartView::NoRubberBand);
+        rightHost->layout()->addWidget(m_levelPieView);
+    }
+}
+
+void AchievementWindow::updateChartsFromTable()
+{
+    initChartsIfNeeded();
+    if (!m_typeChartView || !m_levelPieView || !ui || !ui->tableWidget) return;
+
+    QMap<QString, int> typeCount;
+    QMap<QString, int> levelCount;
+
+    const int rows = ui->tableWidget->rowCount();
+    for (int r = 0; r < rows; ++r) {
+        if (ui->tableWidget->isRowHidden(r)) continue;
+
+        const auto* typeIt = ui->tableWidget->item(r, 2);
+        const auto* levelIt = ui->tableWidget->item(r, 3);
+
+        QString type = typeIt ? typeIt->text().trimmed() : QString();
+        QString level = levelIt ? levelIt->text().trimmed() : QString();
+
+        if (type.isEmpty()) type = QStringLiteral("未分类");
+        if (level.isEmpty()) level = QStringLiteral("未知");
+
+        typeCount[type] += 1;
+        levelCount[level] += 1;
+    }
+
+    // -------- 左：柱状图（按类型） --------
+    {
+        auto* set = new QBarSet(QStringLiteral("数量"));
+        QStringList categories;
+
+        // 排序：按数量降序
+        QList<QPair<QString,int>> items;
+        for (auto it = typeCount.cbegin(); it != typeCount.cend(); ++it) {
+            items.push_back({it.key(), it.value()});
+        }
+        std::sort(items.begin(), items.end(), [](const auto& a, const auto& b){
+            if (a.second != b.second) return a.second > b.second;
+            return a.first < b.first;
+        });
+
+        for (const auto& p : items) {
+            categories << p.first;
+            *set << p.second;
+        }
+
+        auto* series = new QBarSeries();
+        series->append(set);
+
+        // 复用 initChartsIfNeeded() 创建的 chart，避免 setChart 造成所有权/释放差异
+        QChart* chart = m_typeChartView->chart();
+        chart->removeAllSeries();
+        for (auto* ax : chart->axes()) {
+            chart->removeAxis(ax);
+            ax->deleteLater();
+        }
+        chart->addSeries(series);
+        chart->setTitle(QStringLiteral("成就类型分布"));
+        chart->legend()->hide();
+        chart->setAnimationOptions(QChart::SeriesAnimations);
+
+        auto* axisX = new QBarCategoryAxis();
+        axisX->append(categories);
+        chart->addAxis(axisX, Qt::AlignBottom);
+        series->attachAxis(axisX);
+
+        auto* axisY = new QValueAxis();
+        axisY->setLabelFormat("%d");
+        axisY->setMin(0);
+        axisY->setMax(qMax(1, rows));
+        chart->addAxis(axisY, Qt::AlignLeft);
+        series->attachAxis(axisY);
+    }
+
+    // -------- 右：扇形图（按级别） --------
+    {
+        auto* series = new QPieSeries();
+
+        QList<QPair<QString,int>> items;
+        for (auto it = levelCount.cbegin(); it != levelCount.cend(); ++it) {
+            items.push_back({it.key(), it.value()});
+        }
+        std::sort(items.begin(), items.end(), [](const auto& a, const auto& b){
+            if (a.second != b.second) return a.second > b.second;
+            return a.first < b.first;
+        });
+
+        int maxV = 0;
+        for (const auto& p : items) {
+            series->append(p.first, p.second);
+            maxV = qMax(maxV, p.second);
+        }
+        series->setLabelsVisible(true);
+
+        // 突出显示最大的一块
+        for (auto* slice : series->slices()) {
+            if (static_cast<int>(slice->value()) == maxV && maxV > 0) {
+                slice->setExploded(true);
+                slice->setLabelVisible(true);
+                break;
+            }
+        }
+
+        QChart* chart = m_levelPieView->chart();
+        chart->removeAllSeries();
+        for (auto* ax : chart->axes()) {
+            chart->removeAxis(ax);
+            ax->deleteLater();
+        }
+        chart->addSeries(series);
+        chart->setTitle(QStringLiteral("成就级别占比"));
+        chart->legend()->setAlignment(Qt::AlignBottom);
+        chart->setAnimationOptions(QChart::SeriesAnimations);
+    }
 }

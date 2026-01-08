@@ -6,6 +6,7 @@
 
 class QSqlTableModel;
 class QSortFilterProxyModel;
+class QChartView;
 
 namespace Ui {
 class LogRecordWindow;
@@ -27,6 +28,10 @@ private:
     void connectSignals();
     void updateCountLabel();
 
+    // Charts (QtCharts)
+    void initChartsIfNeeded();
+    void updateChartsFromTable();
+
 private slots:
     void onAddLogClicked();
     void onRefreshClicked();
@@ -43,6 +48,9 @@ private:
 
     QSqlTableModel* m_model = nullptr;
     QSortFilterProxyModel* m_proxy = nullptr;
+
+    QChartView* m_pieChartView = nullptr;
+    QChartView* m_lineChartView = nullptr;
 };
 
 #endif // LOGRECORDWINDOW_H

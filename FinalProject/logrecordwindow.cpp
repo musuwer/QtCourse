@@ -15,6 +15,19 @@
 #include <QDateTime>
 #include <QVector>
 #include <QDir>
+#include <QPainter>
+
+#include <algorithm>
+
+// QtCharts
+#include <QtCharts/QChart>
+#include <QtCharts/QChartView>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QDateTimeAxis>
+#include <QtCharts/QValueAxis>
+
+#include <QSqlQuery>
 
 #include "dbmanager.h"
 #include "addlogwindow.h"
@@ -128,6 +141,14 @@ void LogRecordWindow::connectSignals()
     connect(ui->export_csv_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onExportCsvClicked);
     connect(ui->search_log_pushButton, &QPushButton::clicked, this, &LogRecordWindow::onSearchClicked);
     connect(ui->tableView, &QTableView::customContextMenuRequested, this, &LogRecordWindow::onTableContextMenuRequested);
+
+    // Charts refresh when table changes
+    if (m_model) {
+        connect(m_model, &QAbstractItemModel::dataChanged, this, &LogRecordWindow::updateChartsFromTable);
+        connect(m_model, &QAbstractItemModel::modelReset, this, &LogRecordWindow::updateChartsFromTable);
+        connect(m_model, &QAbstractItemModel::rowsInserted, this, &LogRecordWindow::updateChartsFromTable);
+        connect(m_model, &QAbstractItemModel::rowsRemoved, this, &LogRecordWindow::updateChartsFromTable);
+    }
 }
 
 void LogRecordWindow::refreshData()
@@ -140,12 +161,158 @@ void LogRecordWindow::refreshData()
     }
     m_model->select();
     updateCountLabel();
+
+    initChartsIfNeeded();
+    updateChartsFromTable();
 }
 
 void LogRecordWindow::updateCountLabel()
 {
     if (!m_proxy) return;
     ui->book_total_label->setText(QString("总计：%1").arg(m_proxy->rowCount()));
+}
+
+void LogRecordWindow::initChartsIfNeeded()
+{
+    if (m_pieChartView && m_lineChartView) {
+        return;
+    }
+
+    // Top: Pie chart (事件类聚)
+    if (!m_pieChartView && ui->pie_widget) {
+        auto* lay = new QVBoxLayout(ui->pie_widget);
+        lay->setContentsMargins(0, 0, 0, 0);
+
+        auto* chart = new QChart();
+        chart->setTitle(QStringLiteral("事件类聚（按标题次数）"));
+        chart->legend()->setAlignment(Qt::AlignRight);
+
+        m_pieChartView = new QChartView(chart, ui->pie_widget);
+        m_pieChartView->setRenderHint(QPainter::Antialiasing);
+        m_pieChartView->setRubberBand(QChartView::NoRubberBand);
+        lay->addWidget(m_pieChartView);
+    }
+
+    // Bottom: Line chart (时光折线铺)
+    if (!m_lineChartView && ui->line_widget) {
+        auto* lay = new QVBoxLayout(ui->line_widget);
+        lay->setContentsMargins(0, 0, 0, 0);
+
+        auto* chart = new QChart();
+        chart->setTitle(QStringLiteral("时光折线铺（按日期事件数）"));
+        chart->legend()->hide();
+
+        m_lineChartView = new QChartView(chart, ui->line_widget);
+        m_lineChartView->setRenderHint(QPainter::Antialiasing);
+        m_lineChartView->setRubberBand(QChartView::NoRubberBand);
+        lay->addWidget(m_lineChartView);
+    }
+}
+
+void LogRecordWindow::updateChartsFromTable()
+{
+    if (!m_proxy) return;
+    if (!m_pieChartView || !m_lineChartView) return;
+
+    // Aggregate from the *currently displayed* rows (proxy model):
+    // columns (source): 2=title, 5=log_date
+    QMap<QString, int> titleCounts;
+    QMap<QDate, int> dateCounts;
+
+    const int rows = m_proxy->rowCount();
+    for (int r = 0; r < rows; ++r) {
+        const QString title = m_proxy->data(m_proxy->index(r, 2)).toString().trimmed();
+        const QString dateStr = m_proxy->data(m_proxy->index(r, 5)).toString().trimmed();
+
+        if (!title.isEmpty()) {
+            titleCounts[title] += 1;
+        }
+
+        QDate d = QDate::fromString(dateStr, Qt::ISODate);
+        if (!d.isValid()) d = QDate::fromString(dateStr, "yyyy/M/d");
+        if (!d.isValid()) d = QDate::fromString(dateStr, "yyyy-MM-dd");
+        if (d.isValid()) {
+            dateCounts[d] += 1;
+        }
+    }
+
+    // ----------------- Pie chart -----------------
+    {
+        QChart* chart = m_pieChartView->chart();
+        chart->removeAllSeries();
+
+        auto* series = new QPieSeries(chart);
+
+        // Take top N titles, rest -> "其他"
+        QVector<QPair<QString, int>> vec;
+        vec.reserve(titleCounts.size());
+        for (auto it = titleCounts.constBegin(); it != titleCounts.constEnd(); ++it) {
+            vec.append({it.key(), it.value()});
+        }
+        std::sort(vec.begin(), vec.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
+
+        const int topN = 8;
+        int other = 0;
+        for (int i = 0; i < vec.size(); ++i) {
+            if (i < topN) {
+                auto* slice = series->append(vec[i].first, vec[i].second);
+                slice->setLabel(QString("%1 (%2)").arg(vec[i].first).arg(vec[i].second));
+                slice->setLabelVisible(true);
+            } else {
+                other += vec[i].second;
+            }
+        }
+        if (other > 0) {
+            auto* slice = series->append(QStringLiteral("其他"), other);
+            slice->setLabel(QString("其他 (%1)").arg(other));
+            slice->setLabelVisible(true);
+        }
+
+        chart->addSeries(series);
+    }
+
+    // ----------------- Line chart -----------------
+    {
+        QChart* chart = m_lineChartView->chart();
+        chart->removeAllSeries();
+
+        // Remove old axes
+        const auto axes = chart->axes();
+        for (auto* ax : axes) {
+            chart->removeAxis(ax);
+            ax->deleteLater();
+        }
+
+        auto* series = new QLineSeries(chart);
+
+        QList<QDate> dates = dateCounts.keys();
+        std::sort(dates.begin(), dates.end());
+
+        int maxY = 0;
+        for (const QDate& d : dates) {
+            const int c = dateCounts.value(d);
+            maxY = std::max(maxY, c);
+            const QDateTime dt(d, QTime(0, 0, 0));
+            series->append(dt.toMSecsSinceEpoch(), c);
+        }
+
+        chart->addSeries(series);
+
+        auto* axisX = new QDateTimeAxis(chart);
+        axisX->setFormat("MM-dd");
+        axisX->setTitleText(QStringLiteral("日期"));
+        const int nDates = static_cast<int>(dates.size());
+        axisX->setTickCount(std::min(10, std::max(2, nDates)));
+        chart->addAxis(axisX, Qt::AlignBottom);
+        series->attachAxis(axisX);
+
+        auto* axisY = new QValueAxis(chart);
+        axisY->setTitleText(QStringLiteral("事件数"));
+        axisY->setLabelFormat("%d");
+        axisY->setRange(0, std::max(1, maxY + 1));
+        chart->addAxis(axisY, Qt::AlignLeft);
+        series->attachAxis(axisY);
+    }
 }
 
 void LogRecordWindow::onAddLogClicked()

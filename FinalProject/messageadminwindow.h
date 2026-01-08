@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QString>
 
+class QChartView; // QtCharts
+
 namespace Ui {
 class MessageAdminWindow;
 }
@@ -22,6 +24,10 @@ public slots:
 private:
     void initUi();
     void connectSignals();
+
+    // 图表：每月意见数量
+    void initChartsIfNeeded();
+    void updateMonthChart(const QString& senderFilter, bool onlyNoReply);
     void loadData(const QString& senderFilter, bool onlyNoReply);
 
 private slots:
@@ -33,6 +39,8 @@ private slots:
 private:
     Ui::MessageAdminWindow *ui;
     QString m_adminName;
+
+    QChartView* m_monthChartView = nullptr;
 };
 
 #endif // MESSAGEADMINWINDOW_H

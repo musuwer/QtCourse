@@ -46,7 +46,7 @@
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
           <horstretch>0</horstretch>
-          <verstretch>5</verstretch>
+          <verstretch>6</verstretch>
          </sizepolicy>
         </property>
         <property name="frameShape">
@@ -230,7 +230,7 @@ font: 15pt &quot;Agency FB&quot;;</string>
                <widget class="QFrame" name="frame_2">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
+                  <horstretch>3</horstretch>
                   <verstretch>1</verstretch>
                  </sizepolicy>
                 </property>

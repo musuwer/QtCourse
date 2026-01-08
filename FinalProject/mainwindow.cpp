@@ -13,6 +13,7 @@
 #include "moodcalendarwindow.h"
 #include "messageuserwindow.h"
 #include "messageadminwindow.h"
+#include "chatexchangewindow.h"
 #include "aboutwindow.h"
 
 MainWindow::MainWindow(const QString& username, QWidget *parent)
@@ -120,6 +121,8 @@ void MainWindow::initPages()
         m_messagePage = new MessageUserWindow(m_username, this);
     }
 
+    m_chat = new ChatExchangeWindow(m_username, this);
+
     m_about = new AboutWindow(this);
 
     // 顺序必须与 listWidget 项一致
@@ -127,8 +130,9 @@ void MainWindow::initPages()
     ui->stackedWidget->addWidget(m_achievement); // 1 成就管理
     ui->stackedWidget->addWidget(m_log);         // 2 事件记录
     ui->stackedWidget->addWidget(m_mood);        // 3 心情日历
-    ui->stackedWidget->addWidget(m_messagePage); // 4 反馈交流
-    ui->stackedWidget->addWidget(m_about);       // 5 关于
+    ui->stackedWidget->addWidget(m_messagePage); // 4 意见反馈（原有数据库反馈）
+    ui->stackedWidget->addWidget(m_chat);        // 5 聊天交流（Lab4 网络聊天室）
+    ui->stackedWidget->addWidget(m_about);       // 6 关于
 
     ui->listWidget->setCurrentRow(0);
     ui->stackedWidget->setCurrentIndex(0);
