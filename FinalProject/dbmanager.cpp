@@ -12,6 +12,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QtGlobal>
+#include <QSet>
 
 DbManager& DbManager::instance()
 {
@@ -41,6 +42,17 @@ static bool tableHasColumn(QSqlDatabase& db, const QString& table, const QString
         }
     }
     return false;
+}
+
+static QSet<QString> tableColumns(QSqlDatabase& db, const QString& table)
+{
+    QSet<QString> cols;
+    QSqlQuery q(db);
+    q.exec(QString("PRAGMA table_info(%1);").arg(table));
+    while (q.next()) {
+        cols.insert(q.value(1).toString().trimmed().toLower());
+    }
+    return cols;
 }
 
 
@@ -173,7 +185,8 @@ bool DbManager::createTables(QString* errOut)
         return true;
     };
 
-    if (!execSql(R"(
+    // ------------------ users ------------------
+    if (!execSql(R"SQL(
         CREATE TABLE IF NOT EXISTS users(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
@@ -181,23 +194,68 @@ bool DbManager::createTables(QString* errOut)
             role TEXT NOT NULL DEFAULT 'user',
             created_at TEXT DEFAULT (datetime('now'))
         );
-    )")) return false;
+    )SQL")) return false;
 
-    if (!execSql(R"(
-        CREATE TABLE IF NOT EXISTS logs(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            name TEXT,
-            type TEXT,
-            location TEXT,
-            time TEXT,
-            content TEXT,
-            score INTEGER DEFAULT 0,
-            created_at TEXT NOT NULL
-        );
-    )")) return false;
+    // ------------------ logs (migrate if needed) ------------------
+    auto ensureLogsTable = [&]() -> bool {
+        // If not exists, create the expected schema.
+        if (!m_db.tables().contains("logs")) {
+            return execSql(R"SQL(
+                CREATE TABLE IF NOT EXISTS logs(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    title TEXT,
+                    person TEXT,
+                    place TEXT,
+                    log_date TEXT,
+                    mood_score INTEGER DEFAULT 0,
+                    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+                );
+            )SQL");
+        }
 
-    if (!execSql(R"(
+        const QSet<QString> cols = tableColumns(m_db, "logs");
+        const bool schemaOk = cols.contains("title") && cols.contains("person") && cols.contains("place")
+                              && cols.contains("log_date") && cols.contains("mood_score") && cols.contains("created_at");
+        if (schemaOk) return true;
+
+        // Rename old table, create new table, then copy best-effort.
+        const QString backup = QString("logs_backup_%1").arg(QDateTime::currentDateTime().toString("yyyyMMddHHmmss"));
+        if (!execSql(QString("ALTER TABLE logs RENAME TO %1;").arg(backup))) return false;
+
+        if (!execSql(R"SQL(
+            CREATE TABLE logs(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                title TEXT,
+                person TEXT,
+                place TEXT,
+                log_date TEXT,
+                mood_score INTEGER DEFAULT 0,
+                created_at TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+        )SQL")) return false;
+
+        const QString titleExpr   = cols.contains("title")      ? "title"      : (cols.contains("name")     ? "name"     : "''");
+        const QString personExpr  = cols.contains("person")     ? "person"     : (cols.contains("type")     ? "type"     : "''");
+        const QString placeExpr   = cols.contains("place")      ? "place"      : (cols.contains("location") ? "location" : "''");
+        const QString dateExpr    = cols.contains("log_date")   ? "log_date"   : (cols.contains("time")     ? "time"     : "''");
+        const QString moodExpr    = cols.contains("mood_score") ? "mood_score" : (cols.contains("score")    ? "score"    : "0");
+        const QString createdExpr = cols.contains("created_at") ? "created_at" : "datetime('now')";
+
+        const QString copySql = QString(
+            "INSERT INTO logs(user_id,title,person,place,log_date,mood_score,created_at) "
+            "SELECT user_id, %1, %2, %3, %4, %5, %6 FROM %7;"
+        ).arg(titleExpr, personExpr, placeExpr, dateExpr, moodExpr, createdExpr, backup);
+
+        if (!execSql(copySql)) return false;
+        return true;
+    };
+
+    if (!ensureLogsTable()) return false;
+
+    // ------------------ goals ------------------
+    if (!execSql(R"SQL(
         CREATE TABLE IF NOT EXISTS goals(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
@@ -208,9 +266,10 @@ bool DbManager::createTables(QString* errOut)
             deadline TEXT,
             created_at TEXT NOT NULL
         );
-    )")) return false;
+    )SQL")) return false;
 
-    if (!execSql(R"(
+    // ------------------ achievements ------------------
+    if (!execSql(R"SQL(
         CREATE TABLE IF NOT EXISTS achievements(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
@@ -222,9 +281,10 @@ bool DbManager::createTables(QString* errOut)
             f6 TEXT,
             created_at TEXT NOT NULL
         );
-    )")) return false;
+    )SQL")) return false;
 
-    if (!execSql(R"(
+    // ------------------ announcements ------------------
+    if (!execSql(R"SQL(
         CREATE TABLE IF NOT EXISTS announcements(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             author TEXT NOT NULL,
@@ -232,9 +292,10 @@ bool DbManager::createTables(QString* errOut)
             content TEXT NOT NULL,
             created_at TEXT NOT NULL
         );
-    )")) return false;
+    )SQL")) return false;
 
-    if (!execSql(R"(
+    // ------------------ messages ------------------
+    if (!execSql(R"SQL(
         CREATE TABLE IF NOT EXISTS messages(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL,
@@ -244,7 +305,53 @@ bool DbManager::createTables(QString* errOut)
             created_at TEXT NOT NULL,
             replied_at TEXT
         );
-    )")) return false;
+    )SQL")) return false;
+
+    // ------------------ mood_records ------------------
+    if (!execSql(R"SQL(
+        CREATE TABLE IF NOT EXISTS mood_records(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            mood_date TEXT NOT NULL,
+            mood_score INTEGER NOT NULL DEFAULT 0,
+            mood_text TEXT,
+            updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+            UNIQUE(user_id, mood_date)
+        );
+    )SQL")) return false;
+
+    // Seed mood_records from logs (best-effort) if empty.
+    {
+        QSqlQuery c(m_db);
+        if (c.exec("SELECT COUNT(*) FROM mood_records") && c.next()) {
+            const int cnt = c.value(0).toInt();
+            if (cnt == 0) {
+                execSql(R"SQL(
+                    INSERT OR IGNORE INTO mood_records(user_id,mood_date,mood_score,mood_text,updated_at)
+                    SELECT user_id,
+                           substr(log_date,1,10) as mood_date,
+                           CAST(ROUND(AVG(mood_score)) AS INTEGER) as mood_score,
+                           '',
+                           datetime('now')
+                    FROM logs
+                    WHERE log_date IS NOT NULL AND log_date <> ''
+                    GROUP BY user_id, substr(log_date,1,10);
+                )SQL");
+
+                execSql(R"SQL(
+                    UPDATE mood_records
+                    SET mood_text = CASE
+                        WHEN mood_score <= 2 THEN '难过'
+                        WHEN mood_score <= 4 THEN '一般'
+                        WHEN mood_score <= 6 THEN '平静'
+                        WHEN mood_score <= 8 THEN '开心'
+                        ELSE '兴奋'
+                    END
+                    WHERE mood_text IS NULL OR mood_text='';
+                )SQL");
+            }
+        }
+    }
 
     return true;
 }
@@ -421,43 +528,47 @@ QString DbManager::getUserRole(const QString& username, QString* errOut)
 // ================= 日志 =================
 
 bool DbManager::addLog(int userId,
-                       const QString& name,
-                       const QString& type,
-                       const QString& location,
-                       const QString& time,
-                       const QString& content,
-                       int score,
+                       const QString& title,
+                       const QString& person,
+                       const QString& place,
+                       const QString& logDate,
+                       const QString& note,
+                       int moodScore,
                        QString* errOut)
 {
     if (!init(errOut)) return false;
 
+    // logs: id,user_id,title,person,place,log_date,mood_score,created_at
+    // note 字段目前不落库（兼容旧调用）
+    Q_UNUSED(note);
+
     QSqlQuery ins(m_db);
     ins.prepare(R"(
-        INSERT INTO logs(user_id, name, type, location, time, content, score, created_at)
-        VALUES(?,?,?,?,?,?,?,?)
+        INSERT INTO logs(user_id, title, person, place, log_date, mood_score, created_at)
+        VALUES(?,?,?,?,?,?,?)
     )");
     ins.addBindValue(userId);
-    ins.addBindValue(name);
-    ins.addBindValue(type);
-    ins.addBindValue(location);
-    ins.addBindValue(time);
-    ins.addBindValue(content);
-    ins.addBindValue(score);
+    ins.addBindValue(title);
+    ins.addBindValue(person);
+    ins.addBindValue(place);
+    ins.addBindValue(logDate);
+    ins.addBindValue(moodScore);
     ins.addBindValue(QDateTime::currentDateTime().toString(Qt::ISODate));
 
     if (!ins.exec()) { setErr(errOut, ins.lastError().text()); return false; }
     return true;
 }
 
+
 bool DbManager::addLog(int userId,
-                       const QString& s1,
-                       const QString& s2,
-                       const QString& s3,
-                       const QString& s4,
-                       int score,
+                       const QString& title,
+                       const QString& person,
+                       const QString& place,
+                       const QString& logDate,
+                       int moodScore,
                        QString* errOut)
 {
-    return addLog(userId, s1, s2, s3, s4, QString(), score, errOut);
+    return addLog(userId, title, person, place, logDate, QString(), moodScore, errOut);
 }
 
 bool DbManager::deleteLogById(int logId, QString* errOut)
@@ -638,6 +749,8 @@ bool DbManager::resetAndSeed(QString* errOut)
     if (!q.exec("DELETE FROM achievements;")) { setErr(errOut, q.lastError().text()); return false; }
     if (!q.exec("DELETE FROM goals;")) { setErr(errOut, q.lastError().text()); return false; }
     if (!q.exec("DELETE FROM logs;")) { setErr(errOut, q.lastError().text()); return false; }
+    // mood_records 可能还没有数据：一并清空
+    q.exec("DELETE FROM mood_records;");
     if (!q.exec("DELETE FROM users;")) { setErr(errOut, q.lastError().text()); return false; }
 
     const bool hasPassword = tableHasColumn(m_db, "users", "password");
@@ -700,6 +813,31 @@ bool DbManager::resetAndSeed(QString* errOut)
         addLog(uid, "图书馆自习", "学习", "图书馆三楼", "2026-01-03 19:00", "复习Qt信号槽和SQLite接口。", 4, nullptr);
         addLog(uid, "小组讨论", "项目", "线上会议", "2026-01-02 21:00", "确认UI控件命名与数据库字段映射。", 5, nullptr);
     }
+
+    // 将日志的日期+评分映射到 mood_records（按天聚合为 1 条）
+    q.exec(R"SQL(
+        INSERT OR IGNORE INTO mood_records(user_id,mood_date,mood_score,mood_text,updated_at)
+        SELECT user_id,
+               substr(log_date,1,10) as mood_date,
+               CAST(ROUND(AVG(mood_score)) AS INTEGER) as mood_score,
+               '',
+               datetime('now')
+        FROM logs
+        WHERE log_date IS NOT NULL AND log_date <> ''
+        GROUP BY user_id, substr(log_date,1,10);
+    )SQL");
+
+    q.exec(R"SQL(
+        UPDATE mood_records
+        SET mood_text = CASE
+            WHEN mood_score <= 2 THEN '难过'
+            WHEN mood_score <= 4 THEN '一般'
+            WHEN mood_score <= 6 THEN '平静'
+            WHEN mood_score <= 8 THEN '开心'
+            ELSE '兴奋'
+        END
+        WHERE mood_text IS NULL OR mood_text='';
+    )SQL");
 
     // 成就
     {

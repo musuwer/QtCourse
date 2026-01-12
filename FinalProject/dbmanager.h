@@ -36,23 +36,24 @@ bool loginUser(const QString& username, const QString& password, QString* errOut
     QString getUserRole(const QString& username, QString* errOut = nullptr);
 
     // ===== 日志（事件记录）=====
-    // 8参版本：userId + 5个QString + score + err
+    // logs 表字段固定为：id,user_id,title,person,place,log_date,mood_score,created_at
+    // 8参版本（兼容旧调用）：title/person/place/log_date/note(可忽略)/moodScore
     bool addLog(int userId,
-                const QString& name,
-                const QString& type,
-                const QString& location,
-                const QString& time,
-                const QString& content,
-                int score,
+                const QString& title,
+                const QString& person,
+                const QString& place,
+                const QString& logDate,
+                const QString& note,
+                int moodScore,
                 QString* errOut = nullptr);
 
-    // 7参版本：userId + 4个QString + score + err（你的 logrecordwindow.cpp 会匹配这个）
+    // 7参版本（logrecordwindow.cpp 会匹配）：title/person/place/log_date/moodScore
     bool addLog(int userId,
-                const QString& s1,
-                const QString& s2,
-                const QString& s3,
-                const QString& s4,
-                int score,
+                const QString& title,
+                const QString& person,
+                const QString& place,
+                const QString& logDate,
+                int moodScore,
                 QString* errOut = nullptr);
 
     bool deleteLogById(int logId, QString* errOut = nullptr);
